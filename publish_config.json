@@ -21,6 +21,2395 @@ rR1UloGxsXGxkrkNaBXIE6hA/GjPOHMMiJ0lZT37d45uKhUsuYA/vY9FVllzHR+W
 BiNwF08CgQJx3WSXUM3ZwhZH0laNS1pj5JS5h8T60vyWuw3ZTIj1dI0OPAUczodz
 Gs2vj8dPNKJ3G9j3ahY4iix53fCSlMVt/RtCKG8ZEwKCAQBsYCpzsQK/baV5MSIH
 aV9kjYmbyo1+5aM1/jpQcw8d+ge3pAsN+sk1scH7gHywknv3HpxJnRfJ24J83jTA
+
+
+
+
+
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Managed Cluster resource"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The location of the Managed Cluster resource"
+      }
+    },
+    "virtualNetworkRGName": {
+      "type": "string",
+      "metadata": {
+        "description": "Existing VNET RG name for Kubernetes nodes"
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Existing VNET name for Kubernetes nodes"
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Existing subnet name for Kubernetes nodes"
+      }
+    },
+    "serviceCidr": {
+      "type": "string",
+      "metadata": {
+        "description": "CIDR block for all Kubernetes services"
+      }
+    },
+    "dockerBridgeCidr": {
+      "type": "string",
+      "metadata": {
+        "description": "CIDR block for all containers in kubernetes"
+      }
+    },
+    "dnsServiceIP": {
+      "type": "string",
+      "metadata": {
+        "description": "DNS service IP in kuberneties cluster"
+      }
+    },
+    "osDiskSizeGB": {
+      "type": "int",
+      "defaultValue": 0,
+      "metadata": {
+        "description": "Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 0 to 1023. Specifying 0 will apply the default disk size for that agentVMSize"
+      },
+      "minValue": 0,
+      "maxValue": 1023
+    },
+    "dataDiskSizeGB": {
+      "type": "int",
+      "defaultValue": 0,
+      "metadata": {
+        "description": "Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 0 to 1023. Specifying 0 will apply the default disk size for that agentVMSize"
+      },
+      "minValue": 0,
+      "maxValue": 1023
+    },
+    "agentCount": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of worker nodes for the cluster"
+      },
+      "minValue": 1,
+      "maxValue": 30
+    },
+    "workerNodeVMSize": {
+      "type": "string",
+      "metadata": {
+        "description": "The size of the Virtual Machine"
+      }
+    },
+    "linuxAdminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "User name for the Linux Virtual Machines"
+      }
+    },
+    "sshRSAPublicKey": {
+      "type": "string",
+      "metadata": {
+        "description": "Configure all Linux machines with the SSH RSA public key string. Your key should include three parts, for example 'ssh-rsa AAAAB...snip...UcyupgH azureuser@linuxvm'"
+      }
+    },
+    "windowsAdminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "User name for the Windows Virtual Machines"
+      }
+    },
+    "windowsAdminPassword": {
+      "type": "string",
+      "metadata": {
+        "description": "Configure all Windows machines with this secure password for admin username"
+      }
+    },
+    "servicePrincipalClientId": {
+      "metadata": {
+        "description": "Client ID (used by cloudprovider)"
+      },
+      "type": "string"
+    },
+    "servicePrincipalClientSecret": {
+      "metadata": {
+        "description": "The Service Principal Client Secret"
+      },
+      "type": "string"
+    },
+    "osType": {
+      "type": "string",
+      "allowedValues": [
+        "Linux",
+        "Windows"
+      ],
+      "metadata": {
+        "description": "The type of operating system"
+      }
+    },
+    "kubernetesVersion": {
+      "type": "string",
+      "metadata": {
+        "description": "The version of Kubernetes"
+      }
+    },
+    "enableHttpApplicationRouting": {
+      "type": "bool",
+      "metadata": {
+        "description": "Boolean flag to turn on and off of http application routing"
+      }
+    },
+    "networkPlugin": {
+      "allowedValues": [
+        "azure",
+        "kubenet"
+      ],
+      "type": "string",
+      "metadata": {
+        "description": "Network plugin used for building Kubernetes network"
+      }
+    },
+    "podCidr": {
+      "type": "string",
+      "metadata": {
+        "description": "CIDR block for all pods in kubernetes (kubenet only)"
+      }
+    },
+    "nodeRGName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Resource Group for backend node"
+      }
+    },
+    "enablePodSecurityPolicy": {
+      "type": "bool",
+      "metadata": {
+        "description": "Pod security"
+      }
+    },
+    "networkPolicy": {
+      "type": "string",
+      "allowedValues": [
+        "azure",
+        "calico"
+      ],
+      "metadata": {
+        "description": "Pod security"
+      }
+    },
+    "applicationGatewayName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the application gateway"
+      }
+    },
+    "enableIngressApplicationGateway": {
+      "type": "bool",
+      "metadata": {
+        "description": "Boolean flag to turn on and off Ingress ApplicationGateway"
+      }
+    },
+    "agentPoolName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the agent node pool"
+      }
+    },
+    "maxPods": {
+      "type": "int",
+      "defaultValue": 30
+    }
+  },
+  "variables": {
+    "subnetRef": "[resourceId(parameters('virtualNetworkRGName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+    "maxPods": "[parameters('maxPods')]",
+    "clusterProperties": {
+      "kubernetesVersion": "[parameters('kubernetesVersion')]",
+      "dnsPrefix": "[concat(parameters('clusterName'),'-dns')]",
+      "enableRBAC": true,
+      "enablePodSecurityPolicy": "[parameters('enablePodSecurityPolicy')]",
+      "nodeResourceGroup": "[parameters('nodeRGName')]",
+      "addonProfiles": {
+        "httpApplicationRouting": {
+          "enabled": "[parameters('enableHttpApplicationRouting')]"
+        },
+        "ingressApplicationGateway": {
+          "enabled": "[parameters('enableIngressApplicationGateway')]",
+          "config": {
+              "applicationGatewayId": "[resourceId('Microsoft.Network/applicationGateways',parameters('applicationGatewayName'))]"
+          }
+        }
+      },
+      "agentPoolProfiles": [
+        {
+          "name": "[parameters('agentPoolName')]",
+          "type": "VirtualMachineScaleSets",
+          "mode": "System",
+          "osDiskSizeGB": "[parameters('osDiskSizeGB')]",
+          "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
+          "count": "[parameters('agentCount')]",
+          "vmSize": "[parameters('workerNodeVMSize')]",
+          "osType": "[parameters('osType')]",
+          "storageProfile": "ManagedDisks",
+          "enableAutoScaling": false,
+          "vnetSubnetID": "[variables('subnetRef')]",
+          "maxPods": "[variables('maxPods')]"
+        }
+      ],
+      "networkProfile": {
+        "networkPlugin": "[parameters('networkPlugin')]",
+        "serviceCidr": "[parameters('serviceCidr')]",
+        "dockerBridgeCidr": "[parameters('dockerBridgeCidr')]",
+        "dnsServiceIP": "[parameters('dnsServiceIP')]",
+        "networkPolicy": "[parameters('networkPolicy')]",
+        "podCidr": "[parameters('podCidr')]",
+        "outboundType": "userDefinedRouting",
+        "loadBalancerSku": "standard"
+      },
+      "apiServerAccessProfile": {
+        "enablePrivateCluster": true,
+        "privateDNSZone": "none"
+      },
+      "linuxProfile": {
+        "adminUsername": "[parameters('linuxAdminUsername')]",
+        "ssh": {
+          "publicKeys": [
+            {
+              "keyData": "[parameters('sshRSAPublicKey')]"
+            }
+          ]
+        }
+      },
+      "servicePrincipalProfile": {
+        "clientId": "[parameters('servicePrincipalClientId')]",
+        "Secret": "[parameters('servicePrincipalClientSecret')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', 'SolutionDeployment')]"
+      ]
+
+  },
+  "windowsprofileRef": {
+      "windowsProfile": {
+        "adminUsername": "[parameters('windowsAdminUsername')]",
+        "adminPassword": "[parameters('windowsAdminPassword')]"
+      }
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2021-10-01",
+      "type": "Microsoft.ContainerService/managedClusters",
+      "location": "[parameters('location')]",
+      "name": "[parameters('clusterName')]",
+      "properties": "[if(equals( parameters('networkPlugin'), 'azure'), union(variables('clusterProperties'), variables('windowsprofileRef')), variables('clusterProperties'))]"
+    }
+  ],
+  "outputs": {
+    "controlPlaneFQDN": {
+      "type": "string",
+      "value": "[reference(parameters('clusterName')).privateFQDN]"
+    }
+  }
+}
+------------------------------
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "value": "",
+      "metadata": {
+        "description": "The name of the Managed Cluster resource"
+      }
+    },
+    "podCIDR": {
+      "value": "",
+      "metadata": {
+        "description": "The name of the Managed Cluster resource"
+      }
+    },
+    "agentPoolName": {
+      "value": "",
+      "metadata": {
+        "description": "The name of the Managed Cluster resource"
+      }
+    },
+    "location": {
+      "value": "",
+      "metadata": {
+        "description": "The location of the Managed Cluster resource"
+      }
+    },
+    "virtualNetworkRGName": {
+      "value": "",
+      "metadata": {
+        "description": "Existing VNET RG name for Kubernetes nodes"
+      }
+    },
+    "virtualNetworkName": {
+      "value": "",
+      "metadata": {
+        "description": "Existing VNET name for Kubernetes nodes"
+      }
+    },
+    "subnetName": {
+      "value": "",
+      "metadata": {
+        "description": "Existing subnet name for Kubernetes nodes"
+      }
+    },
+    "dnsPrefix": {
+      "value": "",
+      "metadata": {
+        "description": "Optional DNS prefix to use with hosted Kubernetes API server FQDN"
+      }
+    },
+    "serviceCidr": {
+      "value": "",
+      "metadata": {
+        "description": "CIDR block for all Kubernetes services"
+      }
+    },
+    "dockerBridgeCidr": {
+      "value": "",
+      "metadata": {
+        "description": "CIDR block for all containers in kubernetes"
+      }
+    },
+    "dnsServiceIP": {
+      "value": "",
+      "metadata": {
+        "description": "DNS service IP in kuberneties cluster"
+      }
+    },
+    "osDiskSizeGB": {
+      "value": "",
+      "metadata": {
+        "description": "Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 0 to 1023. Specifying 0 will apply the default disk size for that agentVMSize"
+      }
+    },
+    "dataDiskSizeGB": {
+      "value": "",
+      "metadata": {
+        "description": "Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 0 to 1023. Specifying 0 will apply the default disk size for that agentVMSize"
+      }
+    },
+    "agentCount": {
+      "value": "",
+      "metadata": {
+        "description": "The number of worker nodes for the cluster"
+      }
+    },
+    "workerNodeVMSize": {
+      "value": "",
+      "metadata": {
+        "description": "The size of the Virtual Machine"
+      }
+    },
+    "linuxAdminUsername": {
+      "value": "",
+      "metadata": {
+        "description": "User name for the Linux Virtual Machines"
+      }
+    },
+    "sshRSAPublicKey": {
+      "value": "",
+      "metadata": {
+        "description": "Configure all Linux machines with the SSH RSA public key string. Your key should include three parts, for example 'ssh-rsa AAAAB...snip...UcyupgH azureuser@linuxvm'"
+      }
+    },
+    "windowsAdminUsername": {
+      "value": "",
+      "metadata": {
+        "description": "User name for the Windows Virtual Machines"
+      }
+    },
+    "windowsAdminPassword": {
+      "value": "",
+      "metadata": {
+        "description": "Configure all Windows machines with this secure password for admin username"
+      }
+    },
+    "servicePrincipalClientId": {
+      "value": "",
+      "metadata": {
+        "description": "Client ID (used by cloudprovider)"
+      }
+    },
+    "servicePrincipalClientSecret": {
+      "value": "",
+      "metadata": {
+        "description": "The Service Principal Client Secret"
+      }
+    },
+    "osType": {
+      "value": "",
+      "metadata": {
+        "description": "The type of operating system"
+      }
+    },
+    "kubernetesVersion": {
+      "value": "",
+      "metadata": {
+        "description": "The version of Kubernetes"
+      }
+    },
+    "enableOmsAgent": {
+      "value": "",
+      "metadata": {
+        "description": "Boolean flag to turn on and off of OMS agent addon"
+      }
+    },
+    "enableHttpApplicationRouting": {
+      "value": "",
+      "metadata": {
+        "description": "Boolean flag to turn on and off of http application routing"
+      }
+    },
+    "networkPlugin": {
+      "value": "",
+      "metadata": {
+        "description": "Network plugin used for building Kubernetes network"
+      }
+    },
+    "enableRBAC": {
+      "value": "",
+      "metadata": {
+        "description": "Flag to turn on/off RBAC"
+      }
+    },
+    "EnableAutoScaling": {
+      "value": "",
+      "metadata": {
+        "description": "Flag to turn on/off auto scaling"
+      }
+    },
+    "nodeRGName": {
+      "value": "",
+      "metadata": {
+        "description": "Name of the Resource Group for backend node"
+      }
+    },
+    "enablePodSecurityPolicy": {
+      "value": "",
+      "metadata": {
+        "description": "Pod security"
+      }
+    },
+    "networkPolicy": {
+      "value": "",
+      "metadata": {
+        "description": "Pod security"
+      }
+    },
+    "applicationGatewayName": {
+      "value": "",
+      "metadata": {
+        "description": "Name of the application gateway"
+      }
+    },
+    "enableIngressApplicationGateway": {
+      "value": "",
+      "metadata": {
+        "description": "Boolean flag to turn on and off Ingress ApplicationGateway"
+      }
+    },
+    "logAnalyticsWorkspaceName": {
+      "value": "",
+      "metadata": {
+        "description": "Name of the log analytics workspace which will be used for container analytics"
+      }
+    },
+    "logAnalyticsResourceGroup": {
+      "value": "",
+      "metadata": {
+        "description": "The Resource Group in which the log analytics workspace is deployed"
+      }
+    }
+  }
+}
+-------------------------------
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "clusterName": {
+          "type": "string",
+          "metadata": {
+              "description": "The name of your existing AKS cluster."
+          }
+      },
+      "location": {
+          "type": "string",
+          "defaultValue": "",
+          "metadata": {
+              "description": "The location of your existing AKS cluster."
+          }
+      },
+      "agentPoolName": {
+          "type": "string",
+          "metadata": {
+              "description": "The name of the agent pool to create or update."
+          }
+      },
+      "workerNodeVMSize": {
+          "type": "string",
+          "metadata": {
+              "description": "The size of the Virtual Machine"
+          }
+      },
+      "osType": {
+          "type": "string",
+          "allowedValues": [
+              "Linux",
+              "Windows"
+          ],
+          "metadata": {
+              "description": "The type of operating system"
+          }
+      },
+      "virtualNetworkRGName": {
+          "type": "string",
+          "metadata": {
+              "description": "Existing VNET RG name for Kubernetes nodes"
+          }
+      },
+      "virtualNetworkName": {
+          "type": "string",
+          "metadata": {
+              "description": "Existing VNET name for Kubernetes nodes"
+          }
+      },
+      "subnetName": {
+          "type": "string",
+          "metadata": {
+              "description": "Existing subnet name for Kubernetes nodes"
+          }
+      },
+      "agentCount": {
+          "type": "int",
+          "metadata": {
+              "description": "The number of worker nodes for the nodepool"
+          },
+          "minValue": 1,
+          "maxValue": 30
+      },
+      "maxPods": {
+        "type": "int",
+        "defaultValue": 30
+      }
+  },
+  "variables": {
+      "subnetRef": "[resourceId(parameters('virtualNetworkRGName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+      "agentPoolProfiles": {
+          "maxCount": 30,
+          "minCount": 2,
+          "maxPods": "[parameters('maxPods')]",
+          "osDiskSizeGB": 0,
+          "dataDiskSizeGB": 0,
+          "agentCount": "[parameters('agentCount')]",
+          "agentVmSize": "[parameters('workerNodeVMSize')]",
+          "osType": "[parameters('osType')]",
+          "vnetSubnetId": "[variables('subnetRef')]"
+      }
+  },
+  "resources": [
+        {
+          "apiVersion": "2020-01-01",
+          "type": "Microsoft.ContainerService/managedClusters/agentPools",
+          "name": "[concat(parameters('clusterName'),'/', parameters('agentPoolName'))]",
+          "location": "[parameters('location')]",
+          "properties": {
+              "maxCount": "[variables('agentPoolProfiles').maxCount]",
+              "minCount": "[variables('agentPoolProfiles').minCount]",
+              "maxPods": "[variables('agentPoolProfiles').maxPods]",
+              "osDiskSizeGB": "[variables('agentPoolProfiles').osDiskSizeGB]",
+              "dataDiskSizeGB": "[variables('agentPoolProfiles').dataDiskSizeGB]",
+              "count": "[variables('agentPoolProfiles').agentCount]",
+              "vmSize": "[variables('agentPoolProfiles').agentVmSize]",
+              "osType": "[variables('agentPoolProfiles').osType]",
+              "storageProfile": "ManagedDisks",
+              "type": "VirtualMachineScaleSets",
+              "enableAutoScaling":true,
+              "vnetSubnetID": "[variables('agentPoolProfiles').vnetSubnetId]",
+              "nodeTaints":[
+                  "[concat('Workload=', parameters('agentPoolName'),':NoSchedule')]"
+              ]
+          }
+      }
+  ]
+}
+-----------------------
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Managed Cluster resource"
+      }
+    },
+    "clusterSKUTier": {
+      "type": "string",
+      "metadata": {
+        "description": "The SKU tier of the Cluster"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The location of the Managed Cluster resource"
+      }
+    },
+    "virtualNetworkRGName": {
+      "type": "string",
+      "metadata": {
+        "description": "Existing VNET RG name for Kubernetes nodes"
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Existing VNET name for Kubernetes nodes"
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Existing subnet name for Kubernetes nodes"
+      }
+    },
+    "serviceCidr": {
+      "type": "string",
+      "metadata": {
+        "description": "CIDR block for all Kubernetes services"
+      }
+    },
+    "dnsServiceIP": {
+      "type": "string",
+      "metadata": {
+        "description": "DNS service IP in kuberneties cluster"
+      }
+    },
+    "osDiskSizeGB": {
+      "type": "int",
+      "defaultValue": 0,
+      "metadata": {
+        "description": "Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 0 to 1023. Specifying 0 will apply the default disk size for that agentVMSize"
+      },
+      "minValue": 0,
+      "maxValue": 1023
+    },
+    "dataDiskSizeGB": {
+      "type": "int",
+      "defaultValue": 0,
+      "metadata": {
+        "description": "Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 0 to 1023. Specifying 0 will apply the default disk size for that agentVMSize"
+      },
+      "minValue": 0,
+      "maxValue": 1023
+    },
+    "agentCount": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of worker nodes for the cluster"
+      },
+      "minValue": 1,
+      "maxValue": 30
+    },
+    "workerNodeVMSize": {
+      "type": "string",
+      "metadata": {
+        "description": "The size of the Virtual Machine"
+      }
+    },
+    "linuxAdminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "User name for the Linux Virtual Machines"
+      }
+    },
+    "sshRSAPublicKey": {
+      "type": "string",
+      "metadata": {
+        "description": "Configure all Linux machines with the SSH RSA public key string. Your key should include three parts, for example 'ssh-rsa AAAAB...snip...UcyupgH azureuser@linuxvm'"
+      }
+    },
+    "windowsAdminUsername": {
+      "type": "string",
+      "metadata": {
+        "description": "User name for the Windows Virtual Machines"
+      }
+    },
+    "windowsAdminPassword": {
+      "type": "string",
+      "metadata": {
+        "description": "Configure all Windows machines with this secure password for admin username"
+      }
+    },
+    "osType": {
+      "type": "string",
+      "allowedValues": [
+        "Linux",
+        "Windows"
+      ],
+      "metadata": {
+        "description": "The type of operating system"
+      }
+    },
+    "kubernetesVersion": {
+      "type": "string",
+      "metadata": {
+        "description": "The version of Kubernetes"
+      }
+    },
+    "enableKeyvaultSecretsProvider": {
+      "type": "bool",
+      "metadata": {
+        "description": "Boolean flag to turn on and off of key vault secrets provider"
+      }
+    },
+    "enableKeyvaultSecretsRotation": {
+      "type": "string",
+      "metadata": {
+        "description": "String to turn on and off of key vault secrets provider rotation"
+      }
+    },
+    "keyvaultSecretsRotationInterval": {
+      "type": "string",
+      "metadata": {
+        "description": "Boolean flag to turn on and off of key vault secrets provider rotation interval"
+      }
+    },
+    "enableHttpApplicationRouting": {
+      "type": "bool",
+      "metadata": {
+        "description": "Boolean flag to turn on and off of http application routing"
+      }
+    },
+    "networkPlugin": {
+      "allowedValues": [
+        "azure",
+        "kubenet"
+      ],
+      "type": "string",
+      "metadata": {
+        "description": "Network plugin used for building Kubernetes network"
+      }
+    },
+    "podCidr": {
+      "type": "string",
+      "metadata": {
+        "description": "CIDR block for all pods in kubernetes (kubenet only)"
+      }
+    },
+    "nodeRGName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Resource Group for backend node"
+      }
+    },
+    "enablePodSecurityPolicy": {
+      "type": "bool",
+      "metadata": {
+        "description": "Pod security"
+      }
+    },
+    "networkPolicy": {
+      "type": "string",
+      "allowedValues": [
+        "azure",
+        "calico"
+      ],
+      "metadata": {
+        "description": "Pod security"
+      }
+    },
+    "networkPluginMode": {
+      "defaultValue": "",
+      "type": "string",
+      "metadata": {
+        "description": "Network plugin mode for cni"
+      }
+    },
+    "applicationGatewayName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the application gateway"
+      }
+    },
+    "enableIngressApplicationGateway": {
+      "type": "bool",
+      "metadata": {
+        "description": "Boolean flag to turn on and off Ingress ApplicationGateway"
+      }
+    },
+    "agentPoolName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the agent node pool"
+      }
+    },
+    "maxPods": {
+      "type": "int",
+      "defaultValue": 30
+    },
+    "aksManagedIdentity": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the user assigned managed identity"
+      }
+    },
+    "upgradeChannel": {
+      "type": "string",
+      "metadata": {
+        "description": "AKS Cluster Automatic channel upgrade"
+      }
+    },
+    "nodeOSUpgradeChannel": {
+      "type": "string",
+      "metadata": {
+        "description": "AKS Node OS Automatic channel upgrade"
+      }
+    },
+    "adminGroupObjectId": {
+      "type": "string",
+      "metadata": {
+        "description": "The Id of the Azure AD Contributor group"
+      }
+    }
+  },
+  "variables": {
+    "subnetRef": "[resourceId(parameters('virtualNetworkRGName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), parameters('subnetName'))]",
+    "maxPods": "[parameters('maxPods')]",
+    "managedIdentityOperatorRoleDefId": "f1a07417-d97a-45cb-824c-7a7467783830",
+    "vmContributorRoleDefId": "9980e02c-c2be-4d73-94e8-173b1dc7cf3c",
+    "kubenetNetworkProfile": {
+      "networkPlugin": "[parameters('networkPlugin')]",
+      "serviceCidr": "[parameters('serviceCidr')]",
+      "dnsServiceIP": "[parameters('dnsServiceIP')]",
+      "networkPolicy": "[parameters('networkPolicy')]",
+      "podCidr": "[parameters('podCidr')]",
+      "outboundType": "userDefinedRouting",
+      "loadBalancerSku": "standard"
+    },
+    "cniNetworkProfile": {
+      "networkPlugin": "[parameters('networkPlugin')]",
+      "serviceCidr": "[parameters('serviceCidr')]",
+      "dnsServiceIP": "[parameters('dnsServiceIP')]",
+      "networkPolicy": "[parameters('networkPolicy')]",
+      "podCidr": "[ if(equals( parameters('networkPluginMode'), 'Overlay'),parameters('podCidr'), '' )]",
+      "networkPluginMode": "[ if(equals( parameters('networkPluginMode'), 'Overlay'),'Overlay', '' )]",
+      "outboundType": "userDefinedRouting",
+      "loadBalancerSku": "standard"
+    },
+    "ingressAddOn": {
+      "enabled": "[parameters('enableIngressApplicationGateway')]",
+      "config": {
+        "applicationGatewayId": "[resourceId('Microsoft.Network/applicationGateways',parameters('applicationGatewayName'))]"
+      }
+    },
+    "clusterProperties": {
+      "kubernetesVersion": "[parameters('kubernetesVersion')]",
+      "dnsPrefix": "[concat(parameters('clusterName'),'-dns')]",
+      "enableRBAC": true,
+      "enablePodSecurityPolicy": "[parameters('enablePodSecurityPolicy')]",
+      "nodeResourceGroup": "[parameters('nodeRGName')]",
+      "aadProfile": {
+        "adminGroupObjectIDs": [
+          "[parameters('adminGroupObjectId')]"
+        ],
+        "enableAzureRBAC": true,
+        "managed": true,
+        "tenantID": "[subscription().tenantId]"
+      },
+      "addonProfiles": {
+        "azureKeyvaultSecretsProvider": {
+          "enabled": "[parameters('enableKeyvaultSecretsProvider')]",
+          "config": {
+            "enableSecretRotation": "[parameters('enableKeyvaultSecretsRotation')]",
+            "rotationPollInterval": "[parameters('keyvaultSecretsRotationInterval')]"
+          }
+        },
+        "azurepolicy": {
+          "enabled": true
+        },
+        "httpApplicationRouting": {
+          "enabled": "[parameters('enableHttpApplicationRouting')]"
+        },
+        "ingressApplicationGateway": "[if(and(equals( parameters('networkPlugin'), 'azure'), equals( parameters('networkPluginMode'), 'Overlay')), null(), variables('ingressAddOn'))]"
+      },
+      "agentPoolProfiles": [
+        {
+          "name": "[parameters('agentPoolName')]",
+          "type": "VirtualMachineScaleSets",
+          "mode": "System",
+          "osDiskSizeGB": "[parameters('osDiskSizeGB')]",
+          "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
+          "count": "[parameters('agentCount')]",
+          "vmSize": "[parameters('workerNodeVMSize')]",
+          "osType": "[parameters('osType')]",
+          "storageProfile": "ManagedDisks",
+          "enableAutoScaling": false,
+          "vnetSubnetID": "[variables('subnetRef')]",
+          "maxPods": "[variables('maxPods')]"
+        }
+      ],
+      "networkProfile": "[if(equals( parameters('networkPlugin'), 'azure'), variables('cniNetworkProfile'), variables('kubenetNetworkProfile'))]",
+      "apiServerAccessProfile": {
+        "enablePrivateCluster": true,
+        "enablePrivateClusterPublicFQDN": true,
+        "privateDNSZone": "none"
+      },
+      "autoUpgradeProfile": {
+        "nodeOSUpgradeChannel": "[parameters('nodeOSUpgradeChannel')]",
+        "upgradeChannel": "[parameters('upgradeChannel')]"
+      },
+      "linuxProfile": {
+        "adminUsername": "[parameters('linuxAdminUsername')]",
+        "ssh": {
+          "publicKeys": [
+            {
+              "keyData": "[parameters('sshRSAPublicKey')]"
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', 'SolutionDeployment')]"
+      ]
+    },
+    "windowsprofileRef": {
+      "windowsProfile": {
+        "adminUsername": "[parameters('windowsAdminUsername')]",
+        "adminPassword": "[parameters('windowsAdminPassword')]"
+      }
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2023-04-01",
+      "type": "Microsoft.ContainerService/managedClusters",
+      "location": "[parameters('location')]",
+      "name": "[parameters('clusterName')]",
+      "sku": {
+        "name": "Base",
+        "tier": "[parameters('clusterSKUTier')]"
+      },
+      "identity": {
+        "type": "UserAssigned",
+        "userAssignedIdentities": {
+          "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('aksManagedIdentity'))]": {}
+        }
+      },
+      "properties": "[if(equals( parameters('networkPlugin'), 'azure'), union(variables('clusterProperties'), variables('windowsprofileRef')), variables('clusterProperties'))]"
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "AKSNodeRGVMContributorRoleAssignmentDeployment",
+      "apiVersion": "2021-04-01",
+      "resourceGroup": "[parameters('nodeRGName')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ContainerService/managedClusters', parameters('clusterName'))]"
+      ],
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "outer"
+        },
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2021-04-01-preview",
+              "name": "[guid(concat(resourceGroup().id), resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('aksManagedIdentity')), parameters('aksManagedIdentity'), variables('vmContributorRoleDefId'))]",
+              "properties": {
+                "description": "VM Contributor rights role assignment for NodeRG",
+                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('aksManagedIdentity')), '2018-11-30', 'Full').properties.principalId]",
+                "principalType": "ServicePrincipal",
+                "scope": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('nodeRGName'))]",
+                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('vmContributorRoleDefId'))]"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "name": "AKSNodeRGMIOperatorRoleAssignmentDeployment",
+      "apiVersion": "2021-04-01",
+      "resourceGroup": "[parameters('nodeRGName')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ContainerService/managedClusters', parameters('clusterName'))]"
+      ],
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "outer"
+        },
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2021-04-01-preview",
+              "name": "[guid(concat(resourceGroup().id), resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('aksManagedIdentity')), parameters('aksManagedIdentity'), variables('managedIdentityOperatorRoleDefId'))]",
+              "properties": {
+                "description": "Managed Identity Operator rights role assignment for NodeRG",
+                "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('aksManagedIdentity')), '2018-11-30', 'Full').properties.principalId]",
+                "principalType": "ServicePrincipal",
+                "scope": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('nodeRGName'))]",
+                "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', variables('managedIdentityOperatorRoleDefId'))]"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "controlPlaneFQDN": {
+      "type": "string",
+      "value": "[reference(parameters('clusterName')).privateFQDN]"
+    }
+  }
+}
+----------------------------------
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "value": "",
+      "metadata": {
+        "description": "The name of the Managed Cluster resource"
+      }
+    },
+    "clusterSKUTier": {
+      "value": "",
+      "metadata": {
+        "description": "The SKU tier of the Cluster"
+      }
+    },
+    "podCIDR": {
+      "value": "",
+      "metadata": {
+        "description": "The name of the Managed Cluster resource"
+      }
+    },
+    "agentPoolName": {
+      "value": "",
+      "metadata": {
+        "description": "The name of the Managed Cluster resource"
+      }
+    },
+    "location": {
+      "value": "",
+      "metadata": {
+        "description": "The location of the Managed Cluster resource"
+      }
+    },
+    "virtualNetworkRGName": {
+      "value": "",
+      "metadata": {
+        "description": "Existing VNET RG name for Kubernetes nodes"
+      }
+    },
+    "virtualNetworkName": {
+      "value": "",
+      "metadata": {
+        "description": "Existing VNET name for Kubernetes nodes"
+      }
+    },
+    "subnetName": {
+      "value": "",
+      "metadata": {
+        "description": "Existing subnet name for Kubernetes nodes"
+      }
+    },
+    "dnsPrefix": {
+      "value": "",
+      "metadata": {
+        "description": "Optional DNS prefix to use with hosted Kubernetes API server FQDN"
+      }
+    },
+    "serviceCidr": {
+      "value": "",
+      "metadata": {
+        "description": "CIDR block for all Kubernetes services"
+      }
+    },
+    "dnsServiceIP": {
+      "value": "",
+      "metadata": {
+        "description": "DNS service IP in kuberneties cluster"
+      }
+    },
+    "osDiskSizeGB": {
+      "value": "",
+      "metadata": {
+        "description": "Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 0 to 1023. Specifying 0 will apply the default disk size for that agentVMSize"
+      }
+    },
+    "dataDiskSizeGB": {
+      "value": "",
+      "metadata": {
+        "description": "Disk size (in GB) to provision for each of the agent pool nodes. This value ranges from 0 to 1023. Specifying 0 will apply the default disk size for that agentVMSize"
+      }
+    },
+    "agentCount": {
+      "value": "",
+      "metadata": {
+        "description": "The number of worker nodes for the cluster"
+      }
+    },
+    "workerNodeVMSize": {
+      "value": "",
+      "metadata": {
+        "description": "The size of the Virtual Machine"
+      }
+    },
+    "linuxAdminUsername": {
+      "value": "",
+      "metadata": {
+        "description": "User name for the Linux Virtual Machines"
+      }
+    },
+    "sshRSAPublicKey": {
+      "value": "",
+      "metadata": {
+        "description": "Configure all Linux machines with the SSH RSA public key string. Your key should include three parts, for example 'ssh-rsa AAAAB...snip...UcyupgH azureuser@linuxvm'"
+      }
+    },
+    "windowsAdminUsername": {
+      "value": "",
+      "metadata": {
+        "description": "User name for the Windows Virtual Machines"
+      }
+    },
+    "windowsAdminPassword": {
+      "value": "",
+      "metadata": {
+        "description": "Configure all Windows machines with this secure password for admin username"
+      }
+    },
+    "osType": {
+      "value": "",
+      "metadata": {
+        "description": "The type of operating system"
+      }
+    },
+    "kubernetesVersion": {
+      "value": "",
+      "metadata": {
+        "description": "The version of Kubernetes"
+      }
+    },
+    "enableOmsAgent": {
+      "value": "",
+      "metadata": {
+        "description": "Boolean flag to turn on and off of OMS agent addon"
+      }
+    },
+    "enableKeyvaultSecretsProvider": {
+      "value": "",
+      "metadata": {
+        "description": "Boolean flag to turn on and off of key vault secrets provider"
+      }
+    },
+    "enableKeyvaultSecretsRotation": {
+      "value": "",
+      "metadata": {
+        "description": "String to turn on and off of key vault secrets provider rotation"
+      }
+    },
+    "keyvaultSecretsRotationInterval": {
+      "value": "",
+      "metadata": {
+        "description": "Boolean flag to turn on and off of key vault secrets provider rotation interval"
+      }
+    },
+    "enableHttpApplicationRouting": {
+      "value": "",
+      "metadata": {
+        "description": "Boolean flag to turn on and off of http application routing"
+      }
+    },
+    "networkPlugin": {
+      "value": "",
+      "metadata": {
+        "description": "Network plugin used for building Kubernetes network"
+      }
+    },
+    "enableRBAC": {
+      "value": "",
+      "metadata": {
+        "description": "Flag to turn on/off RBAC"
+      }
+    },
+    "EnableAutoScaling": {
+      "value": "",
+      "metadata": {
+        "description": "Flag to turn on/off auto scaling"
+      }
+    },
+    "nodeRGName": {
+      "value": "",
+      "metadata": {
+        "description": "Name of the Resource Group for backend node"
+      }
+    },
+    "enablePodSecurityPolicy": {
+      "value": "",
+      "metadata": {
+        "description": "Pod security"
+      }
+    },
+    "networkPolicy": {
+      "value": "",
+      "metadata": {
+        "description": "Pod security"
+      }
+    },
+    "networkPluginMode": {
+      "value": "",
+      "metadata": {
+        "description": "Pod security"
+      }
+    },
+    "applicationGatewayName": {
+      "value": "",
+      "metadata": {
+        "description": "Name of the application gateway"
+      }
+    },
+    "enableIngressApplicationGateway": {
+      "value": "",
+      "metadata": {
+        "description": "Boolean flag to turn on and off Ingress ApplicationGateway"
+      }
+    },
+    "logAnalyticsWorkspaceName": {
+      "value": "",
+      "metadata": {
+        "description": "Name of the log analytics workspace which will be used for container analytics"
+      }
+    },
+    "logAnalyticsResourceGroup": {
+      "value": "",
+      "metadata": {
+        "description": "The Resource Group in which the log analytics workspace is deployed"
+      }
+    },
+    "aksManagedIdentity": {
+      "value": "",
+      "metadata": {
+        "description": "Name of the user assigned managed identity"
+      }
+    },
+    "upgradeChannel": {
+      "value": "",
+      "metadata": {
+        "description": "AKS Cluster Automatic channel upgrade"
+      }
+    },
+    "nodeOSUpgradeChannel": {
+      "value": "",
+      "metadata": {
+        "description": "AKS Node OS Automatic channel upgrade"
+      }
+    },
+    "adminGroupObjectId": {
+      "value": "",
+      "metadata": {
+        "description": "The Object Id of the contributor AAD group"
+      }
+    }
+  }
+}
+------------------------
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+
+  "parameters": {
+      "userAssignedManagedIdentityName": {
+          "type": "string",
+          "metadata": {
+              "description": "The name of the user assigned managed identity"
+          }
+      },
+      "location": {
+          "type": "string",
+          "defaultValue": "",
+          "metadata": {
+              "description": "The location of your"
+          }
+      }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "name": "[parameters('userAssignedManagedIdentityName')]",
+      "apiVersion": "2018-11-30",
+      "location": "[parameters('location')]"
+    }
+  ],
+  "outputs": {
+      "identityName": {
+          "type": "string",
+          "value": "[parameters('userAssignedManagedIdentityName')]"
+      }
+  }
+}
+-----------------------------
+parameters:
+  - name: agentCount
+    type: string
+  - name: agentPoolName
+    type: string
+  - name: aksClusterName
+    type: string
+  - name: aksClusterSKUTier
+    default: "Free"
+    type: string    
+  - name: aksKeyVaultName
+    type: string
+    default: 'Empty'
+  - name: aksNetworkPlugin
+    type: string
+  - name: aksNetworkPluginMode
+    type: string
+    default: 'Empty'  
+  - name: aksOsType
+    type: string
+  - name: aksNodePoolResourceGroupName
+    type: string
+  - name: aksResourceGroupName
+    type: string
+  - name: aksResourceGroupNamePrefix
+    type: string
+  - name: azureSubscription
+    type: string
+  - name: dnsServiceIP
+    type: string
+    default: '198.19.0.10'
+  - name: kubernetesVersion
+    type: string
+  - name: linuxAdminUsername
+    type: string
+  - name: location
+    type: string
+  - name: networkPolicy
+    type: string
+  - name: podCidr
+    type: string
+    default: '198.18.0.0/16'
+  - name: serviceCidr
+    type: string
+    default: '198.19.0.0/17'
+  - name: subnetName
+    type: string
+  - name: virtualNetworkName
+    type: string
+  - name: virtualNetworkRGName
+    type: string
+  - name: virtualNetworkSubnetName
+    type: string
+  - name: workerNodeVMSize
+    type: string
+  - name: maxPods
+    type: number
+  - name: sshRsaPublicKey
+    type: string
+  - name: applicationGatewayName
+    type: string
+  - name: windowsAdminUsername
+    type: string
+  - name: windowsAdminPassword
+    type: string    
+  - name: aksManagedIdentityName
+    type: string
+  - name: aksKubeletManagedIdentityName
+    type: string
+    default: "Empty"   
+  - name: acrRegistryName
+    type: string
+    default: "Empty"
+  - name: keyvaultSecretsRotationInterval
+    type: string
+    default: "2m"
+  - name: UpgradeChannel
+    type: string
+    default: "stable"     
+  - name: NodeOSUpgradeChannel
+    type: string
+    default: "NodeImage"
+
+
+steps:
+- task: AzurePowerShell@5
+  name: Identity
+  displayName: 'Create UserAssigned Managed Identity & Fetch AAD Group'
+  condition: succeeded()
+  inputs:
+    azureSubscription: '${{ parameters.azureSubscription }}'
+    ScriptType: InlineScript
+    Inline: |
+      $AllModules = Get-Module -All
+      $AzManagedServiceIdentity = $False
+      $AzAccounts = $False
+      $AzResources = $False
+      foreach($Module in $AllModules.Name){
+        if($Module.Name -eq "Az.ManagedServiceIdentity") { $AzManagedServiceIdentity = $True }
+        if($Module.Name -eq "Az.Accounts" -and $Module.Version.ToString() -eq '2.13.2') { $AzAccounts = $True }
+        if($Module.Name -eq "Az.Resources") { $AzResources = $True }        
+      }
+      if($AzAccounts){
+        Write-Host "Installing update of Az.Accounts"
+        Install-Module -Name 'Az.Accounts' -RequiredVersion '2.13.2' -Force
+        Remove-Module -Name 'Az.Accounts'
+        Import-Module -Name 'Az.Accounts' -Force          
+      }
+      if($AzManagedServiceIdentity){
+        Install-Module -Name 'Az.ManagedServiceIdentity' -RequiredVersion '1.1.0' -Force
+        Import-Module -Name 'Az.ManagedServiceIdentity' -Force          
+      }
+      if($AzResources){
+        Install-Module -Name 'Az.Resources' -Force
+        Import-Module -Name 'Az.Resources' -Force          
+      }            
+      $aksManagedIdentity = New-AzUserAssignedIdentity -Name ${{ parameters.aksManagedIdentityName }} -ResourceGroupName ${{ parameters.aksResourceGroupName }} -Location ${{ parameters.location }}
+      Start-Sleep -Seconds 60
+      try {
+        New-AzRoleAssignment -ApplicationId $aksManagedIdentity.ClientId -RoleDefinitionName "Network Contributor" -Scope (Get-AzResourceGroup "${{ parameters.virtualNetworkRGName}}").ResourceId
+      }
+      catch {
+        $ErrorMessage = $_.Exception.Message
+        if( $ErrorMessage.Contains('Conflict')) {
+          Write-Host "Role assignment already present for ${{ parameters.aksManagedIdentityName }} !!!"
+        } else {
+          Write-Error "Role assignment failed with error: $ErrorMessage"
+        }
+      }
+      Write-Host "Formulate the contributor AAD group"
+      try {
+        $subscriptionName = (Get-AzContext).Subscription.Name
+        $subscriptionNameArray = $subscriptionName.Split('-')
+
+        $subscriptionNameArray[1] = $subscriptionNameArray[1] -replace '\d', ''
+        if(  $subscriptionNameArray[1] -eq 'dta' ){
+          $adminGroupName = ($subscriptionNameArray -join '-') + "-Contributor"
+        } elseif ( $subscriptionNameArray[1] -eq 'prd' ){
+          $adminGroupName = ($subscriptionNameArray -join '-') + "-Reader"
+        }
+        $adminGroupObjectId = (Get-AzADGroup -DisplayNameStartsWith $adminGroupName).Id
+      }
+      catch {
+        $ErrorMessage = $_.Exception.Message
+        Write-Error "$ErrorMessage"
+      }
+      Write-Host "The contributor AAD group: $adminGroupObjectId"
+      Write-Host "##vso[task.setvariable variable=adminGroupObjectId;isOutput=true;issecret=false;]$adminGroupObjectId"
+
+    FailOnStandardError: true
+    azurePowerShellVersion: LatestVersion
+    pwsh: true
+
+- task: AzurePowerShell@5
+  displayName: 'Create AKS Cluster - ${{ parameters.aksClusterName }}'
+  condition: succeeded()
+  inputs:
+    azureSubscription: '${{ parameters.azureSubscription }}'
+    ScriptPath: '$(System.DefaultWorkingDirectory)/powershell/Create-KubernetesService-mi.ps1'
+    ScriptArguments:
+      -ResourceGroupName '${{ parameters.aksResourceGroupName }}'
+      -clusterName '${{ parameters.aksClusterName }}'
+      -clusterSKUTier '${{ parameters.aksClusterSKUTier }}'
+      -location '${{ parameters.location }}'
+      -virtualNetworkRGName '${{ parameters.virtualNetworkRGName }}'
+      -virtualNetworkName '${{ parameters.virtualNetworkName }}'
+      -subnetName '${{ parameters.subnetName }}'
+      -serviceCidr '${{ parameters.serviceCidr }}'
+      -dnsServiceIP '${{ parameters.dnsServiceIP }}'
+      -osDiskSizeGB 0
+      -dataDiskSizeGB 0
+      -agentCount '${{ parameters.agentCount }}'
+      -workerNodeVMSize '${{ parameters.workerNodeVMSize }}'
+      -linuxAdminUsername '${{ parameters.linuxAdminUsername }}'
+      -sshRSAPublicKey '${{ parameters.sshRsaPublicKey }}'
+      -windowsAdminUsername '${{ parameters.windowsAdminUsername }}'
+      -windowsAdminPassword '${{ parameters.windowsAdminPassword }}'
+      -osType '${{ parameters.aksOsType }}'
+      -kubernetesVersion '${{ parameters.kubernetesVersion }}'
+      -EnableKeyvaultSecretsProvider $true
+      -EnableKeyvaultSecretsRotation "true"
+      -KeyvaultSecretsRotationInterval '${{ parameters.keyvaultSecretsRotationInterval }}'      
+      -enableHttpApplicationRouting $false
+      -networkPlugin '${{ parameters.aksNetworkPlugin }}'
+      -networkPluginMode '${{ parameters.aksNetworkPluginMode }}'      
+      -DeploymentDebugLevel None
+      -nodeRGName '${{ parameters.aksNodePoolResourceGroupName }}'
+      -enablePodSecurityPolicy $false
+      -networkPolicy '${{ parameters.networkPolicy }}'
+      -PodCidr '${{ parameters.podCidr }}'
+      -AgentPoolName '${{ parameters.agentPoolName }}'
+      -MaxPods ${{ parameters.maxPods }}
+      -ApplicationGatewayName ${{ parameters.applicationGatewayName}}
+      -EnableIngressApplicationGateway $true
+      -AKSManagedIdentity '${{ parameters.aksManagedIdentityName}}'
+      -AdminGroupObjectId '$(Identity.adminGroupObjectId)'
+      -UpgradeChannel '${{ parameters.upgradeChannel}}'
+      -NodeOSUpgradeChannel '${{ parameters.NodeOSUpgradeChannel}}'      
+    FailOnStandardError: true
+    azurePowerShellVersion: LatestVersion
+    pwsh: true
+----------------------------------------------
+parameters:
+  - name: azureSubscription
+    type: string
+  - name: aksResourceGroupName
+    type: string
+  - name: aksClusterName
+    type: string
+  - name: osType
+    type: string
+  - name: workerNodeVMSize
+    type: string
+  - name: location
+    type: string
+  - name: agentPoolname
+    type: string
+  - name: vnetResourceGroupName
+    type: string
+  - name: vnetName
+    type: string
+  - name: subnetName
+    type: string
+  - name: agentCount
+    type: number
+  - name: maxPods
+    type: number
+    default: 30
+
+steps:
+
+- task: AzureResourceGroupDeployment@2
+  displayName: 'Create Node Pool'
+  inputs:
+    azureSubscription: '${{ parameters.azureSubscription }}'
+    resourceGroupName: '${{ parameters.aksResourceGroupName }}'
+    location: '${{ parameters.location }}'
+    csmFile: '$(System.DefaultWorkingDirectory)/arm/aksAddAgentpool.json'
+    overrideParameters: '
+      -clusterName "${{ parameters.aksClusterName }}"
+      -location "${{ parameters.location }}"
+      -agentPoolName "${{ parameters.agentPoolname }}"
+      -workerNodeVMSize "${{ parameters.workerNodeVMSize }}"
+      -osType "${{ parameters.osType }}"
+      -virtualNetworkRGName "${{ parameters.vnetResourceGroupName }}"
+      -virtualNetworkName "${{ parameters.vnetName }}"
+      -subnetName "${{ parameters.subnetName }}"
+      -agentCount ${{ parameters.agentCount }}
+      -maxPods ${{ parameters.maxPods }}'
+----------------------------------
+parameters:
+  - name: azureSubscription
+    type: string
+  - name: aksResourceGroupName
+    type: string
+  - name: aksClusterName
+    type: string
+  - name: namespace
+    type: string
+  - name: manifestFile
+    type: string
+
+steps:
+- task: Kubernetes@1
+  displayName: 'kubectl create namespace'
+  inputs:
+    connectionType: 'Azure Resource Manager'
+    azureSubscriptionEndpoint: '${{ parameters.azureSubscription }}'
+    azureResourceGroup: '${{ parameters.aksResourceGroupName }}'
+    kubernetesCluster: '${{ parameters.aksClusterName }}'
+    useClusterAdmin: true
+    outputFormat: 'yaml'
+    command: apply
+    useConfigurationFile: true
+    configurationType: inline
+    inline: |
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: ${{ parameters.namespace }}
+- task: Kubernetes@1
+  displayName: 'kubectl apply'
+  inputs:
+    connectionType: 'Azure Resource Manager'
+    azureSubscriptionEndpoint: ${{ parameters.azureSubscription }}
+    azureResourceGroup: ${{ parameters.aksResourceGroupName }}
+    kubernetesCluster: ${{ parameters.aksClusterName }}
+    useClusterAdmin: true
+    outputFormat: 'yaml'
+    namespace:  ${{ parameters.namespace }}
+    command: apply
+    useConfigurationFile: true
+    configuration:  ${{ parameters.manifestFile }}
+    arguments: --wait
+----------------------------
+parameters:
+  - name: azureSubscription
+    type: string
+  - name: aksClusterName
+    type: string
+  - name: applicationGatewayName
+    type: string
+  - name: certsKeyVaultName
+    type: string
+  - name: aksKeyVaultLocation
+    type: string
+  - name: aksResourceGroupName
+    type: string
+  - name: repositoryRoot
+    type: string
+    default: "."
+
+steps:
+  - task: AzureCLI@2
+    displayName: "Remove cluster and application gateway"
+    condition: always()
+    name: CertificatesKeyVault
+    inputs:
+      scriptType: "pscore"
+      azureSubscription: "${{ parameters.azureSubscription }}"
+      scriptLocation: inlineScript
+      inlineScript: |
+        $ResourceGroupName = "${{ parameters.aksResourceGroupName }}"
+        $KubernetesClusterName = "${{ parameters.aksClusterName }}"
+        $ApplicationGatewayName = "${{ parameters.applicationGatewayName }}"
+        $RepositoryRoot = "${{ parameters.repositoryRoot }}"
+
+        $aksCheck = az aks list --query "[?name=='$KubernetesClusterName']" | ConvertFrom-Json
+        $aksExists = $aksCheck.Length -gt 0
+        if ($aksExists) {
+          az aks delete -n $KubernetesClusterName -g $ResourceGroupName --no-wait --yes
+
+        }else{
+          Write-Host "Cluster already deleted"
+        }
+      failOnStandardError: false
+      continueOnError: false
+
+  - task: AzurePowerShell@5
+    displayName: "Remove Application Gateway"
+    condition: always()
+    inputs:
+      azureSubscription: "${{ parameters.azureSubscription }}"
+      ScriptPath: ${{ parameters.repositoryRoot }}/powershell/Remove-ApplicationGateway.ps1
+      ScriptArguments:
+        -ResourceGroupName '${{ parameters.aksResourceGroupName }}'
+        -ApplicationGatewayName '${{ parameters.applicationGatewayName }}'
+        -RemoveRelatedServices $true
+        -KeyVaultName '${{parameters.certsKeyVaultName}}'
+      FailOnStandardError: true
+      azurePowerShellVersion: LatestVersion
+      pwsh: true
+
+  - task: AzurePowerShell@5
+    displayName: "Soft delete Keyvault"
+    condition: always()
+    inputs:
+      azureSubscription: "${{ parameters.azureSubscription }}"
+      ScriptType: InlineScript
+      Inline: |
+        try {
+          $KeyVaultInfo = Get-AzKeyVault -Name '${{parameters.certsKeyVaultName}}' -ResourceGroupName '${{ parameters.aksResourceGroupName }}'
+          if ([string]::IsNullOrEmpty($KeyVaultInfo)) {
+              Write-Host "Keyvault has already been deleted"
+          } 
+          else {
+            Remove-AzKeyVault -Name '${{parameters.certsKeyVaultName}}' -ResourceGroupName '${{ parameters.aksResourceGroupName }}' -Force
+            Write-Host "Keyvault has been deleted"
+          }
+        }
+        catch {
+          $ErrorMessage = $_.Exception.Message
+          Write-Error "Error in removing keyvault: $ErrorMessage"
+        }
+      azurePowerShellVersion: LatestVersion
+      pwsh: true
+
+  - task: AzurePowerShell@5
+    displayName: "Clean up Resource group"
+    condition: always()
+    inputs:
+      azureSubscription: "${{ parameters.azureSubscription }}"
+      ScriptType: InlineScript
+      Inline: |
+        try {
+          Remove-AzResourceGroup -Name "${{ parameters.aksResourceGroupName }}" -Force
+        }
+        catch {
+          $ErrorMessage = $_.Exception.Message
+          Write-Error "Error removing resource group: $ErrorMessage"
+        }
+      azurePowerShellVersion: LatestVersion
+      pwsh: true
+-------------------------------
+trigger: none
+
+name: CCoE AKS extra Nodepool Deployment
+
+parameters:
+- name: azureSubscription
+  type: string
+- name: aksResourceGroupNamePrefix
+  displayName: Provide the name of the resoruce group of the target AKS cluster without the suffix '-rg'
+  type: string
+# - name: extraNodePool
+#   displayName: Extra nodepool - Only fill below fields if you also select this box. Otherwise leave field with default values.
+#   type: boolean
+#   default: true
+- name: extraNodepoolName
+  displayName:  Nodepool name - Max 6 characters
+  type: string
+  default: 'empty'
+- name: nodePoolOsType
+  type: string
+  values:
+  - 'Linux'
+  - 'Windows'
+  default: 'Linux'
+  displayName: Provide the operating system of the User nodepool.  
+- name: location
+  type: string
+  default: 'westeurope'
+  values:
+  - 'westeurope'
+  - 'northeurope'
+  - 'westus2'
+  - 'westus'
+  - 'eastus2'
+  - 'centralus'
+  - 'westcentralus'
+  - 'koreacentral'  
+  - 'japaneast'
+  - 'japanwest'
+  displayName: Provide the location where the AKS cluster exists
+- name: environment
+  type: string
+  default: 'dta'
+  values:
+  - 'dta'
+  - 'eng'
+  - 'dev'
+  - 'tst'
+  - 'prd'
+  displayName: Provide the enviroment of the cluster  
+- name: virtualNetworkRGName
+  type: string
+  default: 'empty'
+  displayName: Provide the Virtual Network Resourcegroup Name
+- name: virtualNetworkName
+  type: string
+  default: 'empty'
+  displayName: Provide the Virtual Network  Name  
+- name: aksSubnetName
+  type: string
+  default: 'empty'
+  displayName: AKS Subnet name - Provide the subnetname where the nodepool need to connect to.
+- name: agentCount
+  type: number
+  default: 2
+  displayName: Provide the agent count
+- name: workerNodeVMSize
+  type: string
+  default: 'Standard_E4s_v3'
+- name: maxPods
+  type: number
+  default: 30
+
+# - name: extraNamespace
+#   displayName: Extra namespace -  Fill below fields ONLY IF you also select this box.  Otherwise leave field with default values.
+#   type: boolean
+#   default: true
+# - name: extraNamespaceName
+#   displayName: Provide the name of  Extra Namespace
+#   type: string
+#   default: 'empty'
+# - name: customerResourceGroupNamePrefix
+#   type: string
+#   displayName: Customer RG prefix name - Provide the Customer resource group prefix (without -rg).
+#   default: 'empty'
+# - name: projectName
+#   type: string
+#   displayName: Project name - Provide the Customers Azure DevOps Project name.
+#   default: 'empty'
+
+stages:
+
+- stage: create_nodepool
+  displayName: Create AKS Nodepool
+  jobs:
+  - job:
+    pool:
+      vmImage: 'windows-latest'
+    variables:
+      AksClusterName: '${{ parameters.aksResourceGroupNamePrefix }}-cl'
+      AksResourceGroupName: '${{ parameters.aksResourceGroupNamePrefix }}-rg'
+    steps:
+    - template: '../templates/aks-create-nodepool.yml'
+      parameters:
+        AzureSubscription: '${{ parameters.azureSubscription }}'
+        AksResourceGroupName: "$(AksResourceGroupName)"
+        AksClusterName: "$(AksClusterName)"
+        osType: '${{ parameters.nodePoolOsType }}'
+        WorkerNodeVMSize: '${{ parameters.workerNodeVMSize }}'
+        Location: '${{ parameters.location }}'
+        AgentPoolname: '${{ parameters.extraNodepoolName }}'
+        VnetResourceGroupName: '${{ parameters.virtualNetworkRGName }}'
+        VnetName: '${{ parameters.virtualNetworkName }}'
+        SubnetName: '${{ parameters.aksSubnetName }}'
+        AgentCount: '${{ parameters.agentCount }}'
+        MaxPods: '${{ parameters.maxPods }}'
+
+
+# - stage: create_namespace
+#   displayName: Create AKS Namespace
+#   condition: ne('${{ parameters.extraNamespace }}', 'false')
+#   jobs:
+#   - job: job_create_namespace
+#     pool: CCoE-SharedAgents-Rhel7.9
+#     variables:
+#       AksClusterName: '${{ parameters.aksResourceGroupNamePrefix }}-cl'
+#       AksResourceGroupName: '${{ parameters.aksResourceGroupNamePrefix }}-rg'
+#     steps:
+#     - template: '../templates/aks-create-namespace.yml'
+#       parameters:
+#         AzureSubscription: '${{ parameters.azureSubscription }}'
+#         AksResourceGroupNamePrefix: '${{ parameters.aksResourceGroupNamePrefix }}'
+#         AksClusterName: "$(AksClusterName)"
+#         AksNameSpaceName: '${{ parameters.extraNamespaceName }}'
+#         ServiceName: '${{ parameters.extraNamespaceName }}'
+#         ADGroup: '${{ parameters.customerResourceGroupNamePrefix }}-Contributor' # group that will get full access to the namespace
+#         Environment: '${{ parameters.environment }}'
+#         SkipCreateNamespace: false
+#         SkipFullNamespaceRole: false
+#         SkipSPRoleBinding: false
+#         SkipADGroupRoleBinding: false
+#         SkipADGroupRoleBindingDashBoard: false
+-----------------------------------------------------------
+trigger: none
+
+name: CCoE AKS Infrastructure Deployment
+
+parameters:
+- name: azureSubscription
+  type: string
+  default: 'asml-dta01-<servicename>'
+  displayName: "Name of the Azure subscription"
+- name: aksClusterSKUTier
+  type: string
+  default: 'Free'
+  values:
+  - 'Free'
+  - 'Standard'
+  - 'Premium'
+  displayName: "AKS SKU Tier"    
+- name: location
+  type: string
+  default: 'westeurope'
+  values:
+  - 'westeurope'
+  - 'northeurope'
+  - 'westus'
+  - 'westus2'
+  - 'westus3'
+  - 'eastus2'
+  - 'centralus'
+  - 'westcentralus'
+  - 'japaneast'
+  - 'japanwest'
+  displayName: "Azure Region"
+- name: environment
+  type: string
+  values:
+  - 'dta'
+  - 'prd'
+  default: 'dta'
+  displayName: "environment, dev-test-acc or production"
+- name: aksNetworkPluginMode
+  type: string
+  values:
+  - 'cni'
+  - 'overlay'
+  default: 'overlay'
+  displayName: "Select network plugin for CNI. Overlay or CNI "      
+- name: kubernetesVersion
+  type: string
+  default: '1.22'
+  displayName: "AKS cluster version"  
+- name: serviceName
+  displayName: "Name of the service which will run on the cluster"
+  type: string
+  default: '<serviceName>'
+- name: aksResourceGroupNamePrefix
+  type: string
+  default: 'aks-euwe-dta01'
+  displayName: "Name of the AKS ResourceGroupName Prefix without the -rg suffix. If you BYO appgw certificate, the KV resource group is taken as AKS RG"  
+- name: virtualNetworkRGName
+  type: string
+  default: 'vneteuwe-<servicename>-dta01-rg'
+  displayName: "Name of the Resource Group where the Virtual Network resides"
+- name: virtualNetworkName
+  type: string
+  default: 'dta01-<serviceName>-westeurope-vnet'
+  displayName: "Name of the Virtual Network to be used"
+- name: aksSubnetName
+  type: string
+  default: 'aks01-subnet'
+  displayName: "Name of the subnet to be used by the cluster"
+- name: aksAutoUpgradeMethod
+  type: string
+  values:
+  - 'none'
+  - 'patch'
+  - 'stable'
+  - 'rapid'
+  - 'node-image'  
+  default: 'stable'
+  displayName: "AKS Cluster Auto upgrade method"   
+- name: aksNodeOSAutoUpgradeMethod
+  type: string
+  values:
+  - 'NodeImage'
+  - 'SecurityPatch'
+  - 'Unmanaged'
+  - 'None'
+  default: 'NodeImage'
+  displayName: "AKS Node OS Auto upgrade method"        
+- name: applicationGatewaySubnetName
+  type: string
+  default: 'appgw01-subnet'
+  displayName: "Name of the subnet to be used by the Application Gateway"
+- name: agPrivateIp
+  type: string
+  default: '10.xx.xx.xx'
+  displayName: "Internal IP to be used by the Application Gateway"
+- name: dnsServiceIP
+  type: string
+  default: '10.xx.xx.xx'
+  displayName: "Internal DNS server for AKS"
+- name: serviceCidr
+  type: string
+  default: '10.xx.xx.xx/xx'
+  displayName: "ServiceCidr - IP range for AKS services"
+- name: agentCount
+  type: number
+  default: 2
+  displayName: "Number of worker node instances"
+- name: workerNodeVMSize
+  type: string
+  default: 'Standard_E4s_v3'
+  displayName: "VM size for standard nodepool"
+- name: maxPods
+  type: number
+  default: 30
+  displayName: "Max number of schedulable pods on nodes in standard nodepool"
+- name: shouldAppgwCertificateImported
+  type: boolean
+  default: false
+  displayName: "Do you want to use your own appgw certificate instead of self-signed?"
+- name: keyVaultResourceGroupNamePrefix
+  type: string
+  default: 'Empty'
+  displayName: "Name of the ResourceGroup containing Keyvault holding appgw certificate. Prefix without the -rg suffix. Provide only if shouldAppgwCertificateImported is true. This will be used as AKS RG"
+- name: keyVaultBaseName
+  type: string
+  default: 'Empty'
+  displayName: "Name of the Keyvault which holds the appgw certificate. Provide only if shouldAppgwCertificateImported is true"
+- name: keyVaultAppGWCertificateName
+  type: string
+  default: 'Empty'
+  displayName: "Certificate name in KV for application gateway. Provide only if shouldAppgwCertificateImported is true"    
+
+variables:
+  ${{ if eq( parameters['shouldAppgwCertificateImported'], true ) }}:
+    aksClusterName: '${{ parameters.keyVaultResourceGroupNamePrefix }}-cl'
+  ${{ elseif eq( parameters['shouldAppgwCertificateImported'], false )  }}:
+    aksClusterName: '${{ parameters.aksResourceGroupNamePrefix }}-cl'
+  ${{ if eq( parameters['shouldAppgwCertificateImported'], false ) }}:
+    aksResourceGroupName: '${{ parameters.aksResourceGroupNamePrefix }}-rg'
+    aksResourceGroupNamePrefix: '{{ parameters.aksResourceGroupNamePrefix }}'
+    aksKeyVaultBaseName: '${{ variables.aksClusterName }}'
+    appGatewayCertificateName: '${{ variables.aksClusterName }}-appgw-cert'    
+  ${{ else }}:
+    aksResourceGroupName: '${{ parameters.keyVaultResourceGroupNamePrefix }}-rg'
+    aksResourceGroupNamePrefix: '{{ parameters.keyVaultResourceGroupNamePrefix }}'
+    aksKeyVaultBaseName: '${{ parameters.keyVaultBaseName }}'
+    appGatewayCertificateName: '${{ parameters.keyVaultAppGWCertificateName }}'
+  agentPoolName: 'standard'
+  aksNodePoolResourceGroupName: 'MC_${{ variables.aksResourceGroupName }}_${{ variables.aksClusterName }}_${{ parameters.location}}'
+  agName: '${{ parameters.aksResourceGroupNamePrefix }}-ag'
+  aksStandardNodePoolOsType: 'Linux'
+  networkPolicy: 'calico'
+  aksManagedIdentityName: '${{ parameters.aksResourceGroupNamePrefix }}-aks-uami'
+  aksNetworkPlugin: 'azure'
+  AdminUsername: 'asml-aksadmin'
+  appgwManagedIdentityName: '${{ parameters.aksResourceGroupNamePrefix }}-ag-uami'
+  AppGatewaySKUTier: Standard_v2  
+  AppGatewaySKU: 'Medium'
+  zones: '1,2,3'
+  WafEnabled: False
+  WafMode: 'Prevention'
+  WafRuleSetType: 'OWASP'
+  WafRuleSetVersion: '3.0'  
+
+
+resources:
+  repositories:
+  - repository: ccoe-az-application-gateway
+    type: git
+    name: CCoE\ccoe-az-application-gateway
+  - repository: ccoe-az-key-vault
+    type: git
+    name: CCoE\ccoe-az-key-vault
+  - repository: ccoe-az-common
+    type: git
+    name: CCoE\ccoe-az-common
+
+stages:
+- stage: validate_input_parameters
+  displayName: Validate the input parameters
+  jobs: 
+  - job: job_validate_input_parameters
+    pool:
+      vmImage: 'windows-latest'
+    variables:
+      aksLocation: '${{ parameters.location }}'
+      aksInputVersion: '${{ parameters.kubernetesVersion }}'    
+    steps:
+    - task: AzurePowerShell@5
+      displayName: 'Check the provided kubernetes version'
+      name: ValidateVersion
+      inputs:
+        ConnectedserviceNameARM: ${{ parameters.azureSubscription }}
+        ScriptType: InlineScript
+        Inline: |
+          Install-Module -Name 'Az.Aks' -Force
+          Import-Module -Name 'Az.Aks'          
+          Write-Host "Input AKS version provided: $(aksInputVersion) "
+          $availableVersions = Get-AzAksVersion -Location "$(aksLocation)"|where-object IsPreview -ne "True"
+          Write-Host "Available versions for this region"
+          Write-Host $availableVersions
+          [version]$inputVersion = "$(aksInputVersion)"
+          $versionPresent = $false
+          foreach($version in $availableVersions) {
+            [version]$supportedversion = $version.OrchestratorVersion
+            if ($supportedversion.Major -eq $inputVersion.Major )
+            { 
+              if( $supportedversion.Minor -eq $inputVersion.Minor ) 
+              {
+                if ($supportedversion.Build -eq $inputVersion.Build ) 
+                {
+                  $versionPresent = $true
+                  $AKSVersion = ($supportedversion).toString()
+                } elseif ( $inputVersion.Build -eq -1 ) 
+                {
+                  $AKSVersion = ($availableVersions.OrchestratorVersion[$availableVersions.Length-2]).toString()
+                }
+              }
+            }
+          }
+
+          if(! $versionPresent ) {
+            $AKSVersion = ($availableVersions.OrchestratorVersion[$availableVersions.Length-1]).toString()
+          }
+
+          Write-Host "Setting AKS Version: $AKSVersion"
+          Write-Output "##vso[task.setvariable variable=AKSVersion;isOutput=true;]$AKSVersion"
+        azurePowerShellVersion: LatestVersion
+        pwsh: true
+        
+- stage: create_aks_resource_group
+  displayName: Create AKS Resource Group
+  dependsOn:
+   - validate_input_parameters  
+  jobs:
+  - job: job_create_aks_resource_group
+    steps:
+    - checkout: ccoe-az-common
+      path: s/ccoe-az-common
+    - task: AzurePowerShell@5
+      displayName: 'Create Resource Group'
+      condition: eq('${{ parameters.shouldAppgwCertificateImported}}', false)
+      inputs:
+        azureSubscription: '${{ parameters.azureSubscription }}'
+        ScriptPath: '$(Agent.BuildDirectory)/s/ccoe-az-common/powershell/Create-ResourceGroup.ps1'
+        ScriptArguments: '-ResourceGroupName ${{ variables.aksResourceGroupName }} -location ${{ parameters.location }}'
+        errorActionPreference: continue
+        azurePowerShellVersion: LatestVersion
+
+- stage: create_aks_applicationgateway
+  displayName: Create AKS Application Gateway
+  dependsOn:
+  - create_aks_resource_group
+  jobs:
+  - job: job_create_aks_applicationgateway
+    pool: CCoE-SharedAgents-Rhel7.9
+    variables:
+      serviceName: ${{ parameters.serviceName }}
+      aksResourceGroupName: ${{ variables.aksResourceGroupName }}
+      certificateName: '${{ variables.appGatewayCertificateName }}'
+      publicIPName: '${{ variables.agName }}-pub-ip'
+      PermissionsToSecrets: get, list, set, delete, backup, restore, recover, purge
+      PermissionsToKeys: encrypt, decrypt, wrapKey, unwrapKey, sign, verify, get, list, create, update, import, delete, backup, restore, recover, purge
+      PermissionsToCertificates: get, list, delete, create, import, update, managecontacts, getissuers, listissuers, setissuers, deleteissuers, manageissuers, recover, purge
+    steps:
+    - checkout: self
+      path: s/self
+    - checkout: ccoe-az-application-gateway
+      path: s/ccoe-az-application-gateway
+    - checkout: ccoe-az-key-vault
+      path: s/ccoe-az-key-vault
+    - task: AzurePowerShell@5
+      name: AADGroup
+      displayName: 'Formulate admin AAD group'
+      condition: succeeded()
+      inputs:
+        azureSubscription: '${{ parameters.azureSubscription }}'
+        ScriptType: InlineScript
+        Inline: |
+          try {
+            if (Get-Module -ListAvailable -Name 'Az.Accounts') {
+                Write-Host "Az Accounts Module exists"
+            } 
+            else {
+              Install-Module -Name 'Az.Accounts' -RequiredVersion '2.13.2' -Force
+              Import-Module -Name 'Az.Accounts'
+            }
+
+            if (Get-Module -ListAvailable -Name 'Az.Resources') {
+                Write-Host "Az Resources Module exists"
+            } 
+            else {
+              Install-Module -Name 'Az.Resources' -Force
+              Import-Module -Name 'Az.Resources'
+            }
+            $subscriptionName = (Get-AzContext).Subscription.Name
+            Write-Host "Subscription name: $subscriptionName"
+            $subscriptionNameArray = $subscriptionName.Split('-')
+
+            $subscriptionNameArray[1] = $subscriptionNameArray[1] -replace '\d', ''
+            if( $subscriptionNameArray[1]  -eq 'dta' ){
+              $adminGroupName = ($subscriptionNameArray -join '-') + "-Contributor"
+            } elseif ($subscriptionNameArray[1] -eq 'prd' ){
+              $adminGroupName = ($subscriptionNameArray -join '-') + "-Reader"
+            }
+            Write-Host "Admin group name is: $adminGroupName"
+            $adminGroupObjectId = (Get-AzADGroup -DisplayNameStartsWith $adminGroupName).Id
+            Write-Output "##vso[task.setvariable variable=adminGroupObjectId]$($adminGroupObjectId)"        
+          }
+          catch {
+            $ErrorMessage = $_.Exception.Message
+            Write-Error "Error fetching AAD group with message: $ErrorMessage"        
+          }
+        FailOnStandardError: true
+        azurePowerShellVersion: LatestVersion
+        pwsh: true
+
+    - task: AzurePowerShell@5
+      name: RandomStringKV
+      displayName: Create a new KV name with a random string
+      condition: succeeded()
+      inputs:
+        azureSubscription: '${{ parameters.azureSubscription }}'
+        ScriptType: InlineScript
+        Inline: |
+          $randomString = -join ((48..57) + (97..122) | Get-Random -Count 5 | % {[char]$_})
+          $newAksKeyVaultBaseName = "${{ variables.aksKeyVaultBaseName }}" + $randomString
+          $newAksKeyVaultName = $newAksKeyVaultBaseName + "-kv"
+          Write-Host "the new key vault name is $($newAksKeyVaultName)"
+          Write-Output "##vso[task.setvariable variable=newAksKeyVaultName;isOutput=true;]$newAksKeyVaultName"
+          Write-Output "##vso[task.setvariable variable=newAksKeyVaultBaseName]$($newAksKeyVaultBaseName)"
+        azurePowerShellVersion: LatestVersion
+        pwsh: true
+
+    # Create and Set KV access for Self signed certificate        
+    - ${{ if eq(parameters.shouldAppgwCertificateImported, false ) }}:    
+      - template: devops/templates/create-key-vault.yml@ccoe-az-key-vault
+        parameters:
+          AzureSubscription: '${{ parameters.azureSubscription }}'
+          ResourceGroupName: $(aksResourceGroupName)
+          Location: '${{ parameters.location}}'
+          KeyVaultName:  $(newAksKeyVaultBaseName)
+          EnableVaultForDeployment: true
+          EnableVaultForDiskEncryption: true
+          EnableVaultForTemplateDeployment: true
+          EnableRbacAuthorization: false
+          Bypass: AzureServices
+          DefaultAction: Allow                    
+          RepositoryRoot: "$(Agent.BuildDirectory)/s/ccoe-az-key-vault"
+
+    - ${{ if eq(parameters.shouldAppgwCertificateImported, false ) }}:  
+      - template: devops/templates/create-key-vault-certificate.yml@ccoe-az-key-vault
+        parameters:
+          AzureSubscription: '${{ parameters.azureSubscription }}'
+          KeyVaultName:  $(RandomStringKV.newAksKeyVaultName)
+          RepositoryRoot: "$(Agent.BuildDirectory)/s/ccoe-az-key-vault"
+          ContentType: "application/x-pkcs12"
+          DNSName: "asml"
+          Subject: "CN=asml"
+          CertificateName: '${{ variables.appGatewayCertificateName }}'
+
+    # Set KV access for imported certificate
+    - ${{ if eq(parameters.shouldAppgwCertificateImported, true ) }}:  
+      - template: devops/templates/set-key-vault-access-policy.yml@ccoe-az-key-vault
+        parameters:
+          AzureSubscription: '${{ parameters.azureSubscription }}'
+          KeyVaultName:  $(RandomStringKV.newAksKeyVaultName)
+          AccessObjectIdList: $(adminGroupObjectId)
+          PermissionsToSecrets: $(PermissionsToSecrets)
+          PermissionsToKeys: $(PermissionsToKeys)
+          PermissionsToCertificates: $(PermissionsToCertificates)
+          RepositoryRoot: "$(Agent.BuildDirectory)/s/ccoe-az-key-vault"
+
+    - task: AzurePowerShell@5
+      displayName: 'Create Public IP for appgw'
+      name: NetworkConfig
+      inputs:
+        azureSubscription: '${{ parameters.azureSubscription }}'
+        ScriptType: InlineScript
+        Inline: |
+          $Vnet = Get-AzVirtualNetwork -Name ${{ parameters.virtualNetworkName }} -ResourceGroupName ${{ parameters.virtualNetworkRGName }}
+          $PipResourceIdStandard = New-AzPublicIpAddress -Name $(publicIpName) -ResourceGroupName $(aksResourceGroupName) -AllocationMethod Static -Sku Standard -Location ${{ parameters.location }} -Force
+          Write-Output "##vso[task.setvariable variable=PublicIpAddressResourceId]$($PipResourceIdStandard.Id)"
+          Write-Output "##vso[task.setvariable variable=VirtualNetworkResourceId]$($Vnet.Id)"
+        azurePowerShellVersion: LatestVersion
+        pwsh: true
+    - template: devops/templates/create-application-gateway.yml@ccoe-az-application-gateway
+      parameters:
+        AzureSubscription: ${{ parameters.azureSubscription }}
+        ResourceGroupName: '$(aksResourceGroupName)'
+        Location: '${{ parameters.location}}'
+        AppGatewayName: '${{ variables.agName }}'
+        AppGatewaySKUTier: ${{ variables.AppGatewaySKUTier }}
+        AppGatewaySKU: ${{ variables.AppGatewaySKU }}
+        KeyVaultName:  $(RandomStringKV.newAksKeyVaultName)
+        isGeneratedCertificate: True
+        CertificateName: '${{ variables.appGatewayCertificateName }}'
+        AppgwManagedIdentityName: '${{ variables.appgwManagedIdentityName }}'
+        Capacity: 2
+        MinCapacity: 2
+        MaxCapacity: 10
+        VirtualNetworkResourceId: $(VirtualNetworkResourceId)
+        SubnetName: '${{ parameters.applicationGatewaySubnetName }}'
+        FrontendIpAddress: ${{ parameters.agPrivateIp }}
+        PublicIpAddressResourceId: $(PublicIpAddressResourceId)
+        Zones: ${{ variables.zones }}
+        WafEnabled: ${{ variables.WafEnabled }}
+        WafMode: ${{ variables.WafMode }}
+        WafRuleSetType: ${{ variables.WafRuleSetType }}
+        WafRuleSetVersion: ${{ variables.WafRuleSetVersion }}
+        RepositoryRoot: "$(Agent.BuildDirectory)/s/ccoe-az-application-gateway"
+
+- stage: create_aks_cluster
+  displayName: Create AKS Cluster
+  dependsOn:
+  - validate_input_parameters
+  - create_aks_resource_group
+  - create_aks_applicationgateway
+  jobs:
+  - job:
+    pool: CCoE-SharedAgents-Rhel7.9
+    variables:
+      aksResourceGroupName: ${{ variables.aksResourceGroupName }}
+      aksResourceGroupNamePrefix: '${{ parameters.aksResourceGroupNamePrefix }}'
+      aksClusterName: '${{ variables.aksClusterName }}'
+      aksNodePoolResourceGroupName: '${{ variables.aksNodePoolResourceGroupName }}'
+      applicationGatewayName: '${{ variables.agName }}'
+      aksManagedIdentityName: '${{ variables.aksManagedIdentityName }}'
+      aksVersion: $[stageDependencies.validate_input_parameters.job_validate_input_parameters.outputs['ValidateVersion.AKSVersion']]
+      aksKeyVaultName: $[stageDependencies.create_aks_applicationgateway.job_create_aks_applicationgateway.outputs['RandomStringKV.newAksKeyVaultName']]
+
+    steps:
+    - task: AzurePowerShell@5
+      displayName: 'Check Application Gateway status'
+      condition: succeeded()
+      inputs:
+        ConnectedserviceNameARM: ${{ parameters.azureSubscription }}
+        ScriptType: InlineScript
+        Inline: |
+          $Count = 0
+          while($true) {
+            $AppGw = Get-AzApplicationGateway -Name "$(applicationGatewayName)" -ResourceGroupName "$(aksResourceGroupName)"
+            if ($AppGw.OperationalState -eq "Running" -Or $Count -ge 5 ) {
+              break
+            } else {
+              Start-Sleep -Seconds 60
+              $Count+=1
+            }
+          }
+        azurePowerShellVersion: LatestVersion
+        pwsh: true
+    - template: '../../devops/templates/aks-admin-key-credential.yml'
+      parameters:
+        azureSubscription: '${{ parameters.azureSubscription }}'
+        aksClusterName: '$(aksClusterName)'
+        aksKeyVaultName: '$(aksKeyVaultName)'
+    - template: '../../devops/templates/aks-create-cluster-mi.yml'
+      parameters:
+        agentCount: '${{ parameters.agentCount }}'
+        agentPoolName: '$(agentPoolName)'
+        aksClusterName: '$(aksClusterName)'
+        aksClusterSKUTier: '${{ parameters.aksClusterSKUTier }}'        
+        aksNetworkPlugin: '${{ variables.aksNetworkPlugin }}'
+        aksNetworkPluginMode: '${{ parameters.aksNetworkPluginMode }}'                  
+        aksNodePoolResourceGroupName: '$(aksNodePoolResourceGroupName)'
+        aksOSType: '$(aksStandardNodePoolOsType)'
+        aksResourceGroupName: '$(aksResourceGroupName)'
+        aksResourceGroupNamePrefix: '$(aksResourceGroupNamePrefix)'
+        azureSubscription: '${{ parameters.azureSubscription }}'
+        KubernetesVersion: '$(aksVersion)'
+        linuxAdminUsername: '${{ variables.AdminUsername }}'
+        SshRsaPublicKey: '$(Credential.SshRsaPublicKey)'
+        windowsAdminUsername: '${{ variables.AdminUsername}}'
+        WindowsAdminPassword: '$(Credential.WindowsSecureSecret)'
+        location: '${{ parameters.location }}'
+        maxPods: ${{ parameters.maxPods }}
+        NetworkPolicy: '$(networkPolicy)'
+        DnsServiceIP: '${{ parameters.dnsServiceIP }}'      
+        ServiceCidr: '${{ parameters.serviceCidr }}'
+        SubnetName: '${{ parameters.aksSubnetName  }}'
+        virtualNetworkName: '${{ parameters.virtualNetworkName }}'
+        virtualNetworkRGName: '${{ parameters.virtualNetworkRGName }}'
+        VirtualNetworkSubnetName: '${{ parameters.applicationGatewaySubnetName }}'
+        WorkerNodeVMSize: '${{ parameters.workerNodeVMSize }}'
+        ApplicationGatewayName: '$(applicationGatewayName)'
+        aksManagedIdentityName: '$(aksManagedIdentityName)'
+        UpgradeChannel: '${{ parameters.aksAutoUpgradeMethod }}'                    
+        NodeOSUpgradeChannel: '${{ parameters.aksNodeOSAutoUpgradeMethod }}'
+
+-------------------------------------
+
 6ehCIg+/TTMbCDR9+ZPkpBBvWVlFLy/sQWoqHzpeOBkfOYqPFzO5VMlUZnsMkhNn
 aHhvGi0wq5Tz22wqqLU6CPlX9Jd4Ka7wTqShXFVic0Xy7gZW3A+d4072FR8PsjNR
 i1fOQIdmjGqYXBUJNYPnKYOblVi+lbUk0rq9r1/H7ig4hu52Nf1+9EMUis7wAeXE
