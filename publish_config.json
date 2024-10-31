@@ -1,1 +1,1259 @@
 {"publishBranch":"adf_publish","enableGitComment":true}
+
+
+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
+
+
+
+
+<#
+.SYNOPSIS
+	Creates an Azure Kubernetes Service
+
+.DESCRIPTION
+	Creates an Azure Kubernetes Service in the specified resource group
+
+.PREREQUISITES
+	There should be an existing virtual network and a subnet for AKS
+
+.OUTPUTS
+    Information on the Created Resource
+
+.PARAMETER ResourceGroupName
+    Name of the Resource Group where the AKS cluster will be created
+
+.PARAMETER ClusterName
+    Name of the AKS cluster
+
+.PARAMETER ClusterSKUTier
+    SKU Tier of the AKS cluster
+
+.PARAMETER Location
+    Location for deploying the AKS
+
+.PARAMETER VirtualNetworkName
+    Name of the Virtual Network to be used
+
+.PARAMETER VirtualNetworkRGName
+    Name of the Resource Group where the Virtual Network resides
+
+.PARAMETER SubnetName
+    Name of the subnet to be used
+
+.PARAMETER ServiceCidr
+    CIDR range of IP address for AKS services
+
+.PARAMETER DnsServiceIP
+    Internal DNS seerver for AKS (EX- 172.17.0.10)
+
+.PARAMETER OsDiskSizeGB
+    Worked Node OSDisk Size in GB , default value is 0
+
+.PARAMETER DataDiskSizeGB
+    Worked Node DataDisk Size in GB , default value is 0
+
+.PARAMETER AgentCount
+    Number of worker node instances
+
+.PARAMETER WorkerNodeVMSize
+    workerNodeVMSize is the size of nodes
+
+.PARAMETER LinuxAdminUsername
+    linuxAdminUsername is the username for Linux VMs
+
+.PARAMETER SshRSAPublicKey
+    SSH key for Linux vm login
+
+.PARAMETER OsType
+    osType worker node for AKS cluster
+
+.PARAMETER KubernetesVersion
+    AKS cluster version
+
+.PARAMETER EnableHttpApplicationRouting
+    enableHttpApplicationRouting for AKS cluster
+
+.PARAMETER NetworkPlugin
+    Type of Network for AKS cluster
+
+.PARAMETER DeploymentDebugLevel
+    DeploymentDebugLevel is None
+
+.PARAMETER nodeRGName
+    Resource group name for backend nodepool
+
+.PARAMETER EnablePodSecurityPolicy
+    pod security
+
+.PARAMETER  AgentPoolName
+    agent pool name for AKS worker nodes
+
+.PARAMETER NetworkPolicy
+    network policy for pods
+
+.PARAMETER UpgradeChannel
+    aks cluster automatic upgrade channel
+
+.PARAMETER NodeOSUpgradeChannel
+    aks node os automatic upgrade channel
+
+#>
+
+[CmdletBinding()]
+
+Param (
+
+    [Parameter(Mandatory = $true)]
+    [String] $ResourceGroupName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $ClusterName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $ClusterSKUTier,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateSet("westeurope", "northeurope", "westus2", "westus", "westus3", "eastus2", "centralus", "westcentralus", "japaneast", "japanwest")]
+    [String] $Location,
+
+    [Parameter(Mandatory = $true)]
+    [String] $VirtualNetworkRGName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $VirtualNetworkName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $SubnetName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $ServiceCidr,
+
+    [Parameter(Mandatory = $true)]
+    [String] $DnsServiceIP,
+
+    [Parameter(Mandatory = $false)]
+    [Int] $OsDiskSizeGB,
+
+    [Parameter(Mandatory = $false)]
+    [Int] $DataDiskSizeGB,
+
+    [Parameter(Mandatory = $true)]
+    [Int] $AgentCount,
+
+    [Parameter(Mandatory = $true)]
+    [String] $WorkerNodeVMSize,
+
+    [Parameter(Mandatory = $true)]
+    [String] $LinuxAdminUsername,
+
+    [Parameter(Mandatory = $true)]
+    [String] $SshRSAPublicKey,
+
+    [Parameter(Mandatory = $true)]
+    [String] $WindowsAdminUsername,
+
+    [Parameter(Mandatory = $true)]
+    [String] $WindowsAdminPassword,
+
+    [Parameter(Mandatory = $true)]
+    [String] $OsType,
+
+    [Parameter(Mandatory = $true)]
+    [String] $KubernetesVersion,
+
+    [Parameter(Mandatory = $true)]
+    [Bool] $EnableHttpApplicationRouting,
+
+    [Parameter(Mandatory = $true)]
+    [Bool] $EnableKeyvaultSecretsProvider,
+
+    [Parameter(Mandatory = "true")]
+    [String] $EnableKeyvaultSecretsRotation,
+
+    [Parameter(Mandatory = $true)]
+    [string] $KeyvaultSecretsRotationInterval,
+
+    [Parameter(Mandatory = $true)]
+    [String] $NetworkPlugin,
+
+    [Parameter(Mandatory = $false)]
+    [String] $NetworkPluginMode,
+
+    [Parameter(Mandatory = $true)]
+    [String] $nodeRGName,
+
+    [Parameter(Mandatory = $true)]
+    [Bool] $EnablePodSecurityPolicy,
+
+    [Parameter(Mandatory = $true)]
+    [ValidatePattern({^[a-z 0-9]{0,8}$})]
+    [String] $AgentPoolName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $NetworkPolicy,
+
+    [Parameter(Mandatory = $true)]
+    [String] $ApplicationGatewayName,
+
+    [Parameter(Mandatory = $true)]
+    [Bool] $EnableIngressApplicationGateway,
+
+    [Parameter(Mandatory = $true)]
+    [String] $AKSManagedIdentity,
+
+    [Parameter(Mandatory = $false)]
+    [Int] $MaxPods = 30,
+
+    [Parameter(Mandatory = $false)]
+    [String] $DeploymentDebugLevel = 'None',
+
+    [Parameter(Mandatory = $false)]
+    [String] $PodCidr,
+
+    [Parameter(Mandatory = $false)]
+    [String] $AdminGroupObjectId,
+
+    [Parameter(Mandatory = $false)]
+    [String] $UpgradeChannel = 'stable',
+
+    [Parameter(Mandatory = $false)]
+    [String] $NodeOSUpgradeChannel = 'NodeImage'
+
+)
+
+$TemplateName = 'aksDeployMI.json'
+Write-Verbose 'Creating parameters object for ARM Template.'
+
+$ParameterARM = @{
+    clusterName                      = $ClusterName
+    clusterSKUTier                   = $ClusterSKUTier
+    location                         = $Location
+    virtualNetworkRGName             = $VirtualNetworkRGName
+    virtualNetworkName               = $VirtualNetworkName
+    subnetName                       = $SubnetName
+    serviceCidr                      = $ServiceCidr
+    dnsServiceIP                     = $DnsServiceIP
+    osDiskSizeGB                     = $OsDiskSizeGB
+    dataDiskSizeGB                   = $DataDiskSizeGB
+    agentCount                       = $AgentCount
+    workerNodeVMSize                 = $WorkerNodeVMSize
+    linuxAdminUsername               = $LinuxAdminUsername
+    sshRSAPublicKey                  = $SshRSAPublicKey
+    windowsAdminUsername             = $WindowsAdminUsername
+    windowsAdminPassword             = $WindowsAdminPassword
+    osType                           = $OsType
+    kubernetesVersion                = $KubernetesVersion
+    enableKeyvaultSecretsProvider    = $EnableKeyvaultSecretsProvider
+    enableKeyvaultSecretsRotation    = $EnableKeyvaultSecretsRotation
+    keyvaultSecretsRotationInterval  = $KeyvaultSecretsRotationInterval
+    enableHttpApplicationRouting     = $EnableHttpApplicationRouting
+    networkPlugin                    = $NetworkPlugin
+    nodeRGName                       = $nodeRGName
+    enablePodSecurityPolicy          = $EnablePodSecurityPolicy
+    agentPoolName                    = $AgentPoolName
+    networkPolicy                    = $NetworkPolicy
+    networkPluginMode                = $NetworkPluginMode
+    applicationGatewayName           = $ApplicationGatewayName
+    enableIngressApplicationGateway  = $EnableIngressApplicationGateway
+    maxPods                          = $MaxPods
+    podCidr                          = "$PodCidr"
+    aksManagedIdentity               = $AKSManagedIdentity
+    adminGroupObjectID               = $AdminGroupObjectId
+    upgradeChannel                   = $UpgradeChannel
+    nodeOSUpgradeChannel             = $NodeOSUpgradeChannel
+}
+
+Write-Host 'Get template for AKS.'
+
+$TemplateFile = Join-Path -Path $PSScriptRoot -ChildPath "..\arm\$TemplateName"
+$TemplateName = (Get-ChildItem $TemplateFile).BaseName
+$DeploymentName = "ARM-deployment-$( -join ((0x30..0x39) + ( 0x41..0x5A) + ( 0x61..0x7A) | Get-Random -Count 48  | ForEach-Object {[char]$_}) )"
+
+$DeploymentParams = @{
+    Name                    = $DeploymentName
+    ResourceGroupName       = $ResourceGroupName
+    TemplateFile            = $TemplateFile
+    TemplateParameterObject = $ParameterARM
+    DeploymentDebugLogLevel = $DeploymentDebugLevel
+    ErrorVariable           = 'errorMessages'
+    ErrorAction             = 'SilentlyContinue'
+    Verbose                 = $true
+}
+
+Write-Verbose 'Deploying ARM Template.'
+New-AzResourceGroupDeployment @DeploymentParams -DeploymentDebugLogLevel All
+
+If ($errorMessages) {
+    Write-Error "Template deployment returned the following errors: $errorMessages"
+}
+--------------------------------------
+<#
+.SYNOPSIS
+Validate AKS environment
+
+.DESCRIPTION
+Test-AksDeployment validates the deployment of an AKS cluster.
+
+.EXAMPLE
+Test-AksDeployment
+
+This command will validate the AKS cluster.
+#>
+[CmdletBinding()]
+Param(
+    [Parameter(
+        Mandatory = $true,
+        HelpMessage = 'AKS cluster name')]
+    [string] $AksClusterName,
+    [Parameter(
+        Mandatory = $true,
+        HelpMessage = 'AKS resource group name')]
+    [string] $AksResourceGroupName
+)
+$ErrorView = 'NormalView'
+
+$SubscriptionId = $(az account show --query id -o tsv)
+Write-Output "Subscription Id: $SubscriptionId"
+
+$SubscriptionName = $(az account show --query name -o tsv)
+Write-Output "Subscription Name: $SubscriptionName"
+
+$TenantId = $(az account show --query tenantId -o tsv)
+Write-Output "Tenant Id: $TenantId"
+
+$Username = $(az account show --query user.name -o tsv)
+Write-Output "Service Principal Name or ID: $Username"
+
+# Relative path for kube config file
+$KubeConfigPath = "./.kube/config"
+
+Write-Output "Get credentials and set up for kubectl to use"
+az aks get-credentials -g "$AksResourceGroupName" -n "$AksClusterName" -a -f "$KubeConfigPath"
+
+Write-Output "Get kubectl version info"
+kubectl --kubeconfig "$KubeConfigPath" version short
+
+$KubectlOutput = (kubectl get pods -o json)
+Write-Host "Kubectl output"
+Write-Host $KubectlOutput
+$Data = $KubectlOutput | ConvertFrom-Json
+
+ForEach ($Item in $Data.items) {
+    Write-Host "Ingress: "$Item.metadata.name
+
+    ForEach ($ContStatus in $Item.status.containerStatuses) {
+        Write-Host " > Checking: $($ContStatus.name)"
+        if ($ContStatus.ready -eq $false) {
+            throw "Failure: $($ContStatus.name) is not ready";
+        }
+        Write-Host "$($ContStatus.name) is ready"
+    }
+}
+
+Write-Output "Remove kubectl config file"
+Remove-Item -Path "$KubeConfigPath"
+----------------------------------------------------------
+
+<#
+.SYNOPSIS
+Validate connectivity
+
+.DESCRIPTION
+Test-Connectivity tests the connectivity to an AKS cluster.
+
+.EXAMPLE
+Test-Connectivity
+
+This command will test the connectivity to an AKS cluster.
+#>
+[CmdletBinding()]
+Param(
+    [Parameter(
+        Mandatory = $true,
+        HelpMessage = 'URL to call')]
+    [string] $UrlToTest,
+    [Parameter(
+        Mandatory = $false,
+        HelpMessage = 'Times to retry')]
+    [Int]  $RetryTimes = 100,
+    [Parameter(
+        Mandatory = $false,
+        HelpMessage = 'Seconds to wait between attempts')]
+    [Int]  $WaitTime = 10
+)
+$ErrorView = 'NormalView'
+
+for ($Attempt = 1; $Attempt -lt $Retrytimes + 1; $Attempt++) {
+    Write-Host "Checking for connectivity to url $UrlToTest. Attempt $Attempt/$Retrytimes"
+
+    try {
+        $response = Invoke-WebRequest -Uri $UrlToTest
+    }
+    catch {
+        Write-Host "Error: $_";
+    }
+
+    if ($response.StatusCode -eq 200) {
+        Write-Host "Connectivity test successful"
+        break
+    }
+    else {
+        if ($Attempt -eq $Retrytimes) {
+            throw "Connectivity test unsuccessful"
+        }
+        else {
+            Write-Host "Waiting $WaitTime seconds for connectivity..."
+            Start-Sleep -Seconds $WaitTime
+        }
+    }
+}
+-------------------------------------------------------------------
+<#
+.SYNOPSIS
+	Removes an Application Gateway.
+
+.DESCRIPTION
+	Removes the specified Application Gateway in the specified resource group.
+
+.PREREQUISITES
+	The specified Application Gateway must exist. The principal executing the script must have removal permissions on the resource and owner permissions on any locks.
+
+.OUTPUTS
+	Success or error message
+#>
+
+[CmdletBinding()]
+Param (
+    [Parameter(Mandatory = $true)]
+    [String] $ResourceGroupName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $ApplicationGatewayName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $KeyVaultName,
+
+    [Bool] $RemoveRelatedServices
+
+)
+
+$ErrorActionPreference = "Stop"
+
+Try {
+    # This throws an error if the resource is not found, even if the error action is silently continue
+    $AG = Get-AzApplicationGateway -Name $ApplicationGatewayName -ResourceGroupName $ResourceGroupName
+
+    Remove-AzResource -resourceid $AG.Id -Force | Out-Null
+    Write-Host "Removed Application Gateway '$ApplicationGatewayName' from resource group '$ResourceGroupName'."
+    Remove-AzKeyVault -Name $KeyVaultName -ResourceGroupName $ResourceGroupName -Force
+    Write-Host "Removed application gateway keyvault '$KeyVaultName'"
+}
+Catch {
+    Write-Warning "Application Gateway '$ApplicationGatewayName' cannot be removed from '$ResourceGroupName'. $($_.Exception.Message)"
+}
+
+if ($RemoveRelatedServices -eq $true) {
+    # Remove Public IP address
+    foreach ($fip in $AG.FrontendIPConfigurations) {
+        if ($fip.PublicIPAddress) {
+            $PIPResourceID = $fip.PublicIPAddress.Id
+            Try {
+                # This throws an error if the resource is not found, even if the error action is silently continue
+                Remove-AzResource -resourceid $PIPResourceID -Force | Out-Null
+                Write-Host "Removed Public IP from resource group '$ResourceGroupName'."
+            }
+            Catch {
+                Write-Warning "Public IP cannot be removed from '$ResourceGroupName'. $($_.Exception.Message)"
+            }
+        }
+    }
+}
+---------------------------------------------------
+<#
+.SYNOPSIS
+Removes the Kubernetes Service.
+
+.DESCRIPTION
+Removes the Kubernetes Service with the specified name from the specified resource group.
+
+.PREREQUISITES
+The specified Kubernetes Service must exist. The principal executing the script must have write permission
+on the resource and 'owner' role on the resource group to be able to remove the locks.
+
+.OUTPUTS
+Success or error message
+#>
+
+[CmdletBinding()]
+Param (
+    [Parameter(Mandatory = $true)]
+    [String] $ResourceGroupName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $KubernetesClusterName,
+
+    [Parameter(Mandatory = $false)]
+    [Bool] $Wait = $false
+)
+
+# In case of an error, display the error message and stop execution
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
+
+# Making sure module Az.Aks is installed so Remove-AzAks cmdlet is available
+If (-not (Get-Module -ListAvailable -Name 'Az.Aks')) {
+    Write-Host "Az.Aks is not installed, installing..."
+    Install-Module -Name Az.Aks -RequiredVersion 1.0.1 -Force -Scope CurrentUser -WarningAction SilentlyContinue
+
+    Write-Host "Import module Az.Aks."
+    Import-Module -Name 'Az.Aks' -Force
+}
+
+Try {
+    if ($Wait) {
+        $Resource = az aks show -n $KubernetesClusterName -g $ResourceGroupName
+        az aks wait --deleted -n $KubernetesClusterName -g $ResourceGroupName
+    }
+    else {
+        az aks delete -n $KubernetesClusterName -g $ResourceGroupName
+    }
+}
+Catch {
+    Write-Warning "An error occured while checking for Kubernetes Service named '$KubernetesClusterName'. $_"
+    Return
+}
+
+Write-Host "Removed Kubernetes Service with name '$KubernetesClusterName' from resource group '$ResourceGroupName'"
+----------------------------------------------------------------
+<#
+.SYNOPSIS
+	Creates a Node pool to existing Azure Kubernetes Service
+
+.DESCRIPTION
+	Creates a Node pool to existing Azure Kubernetes Service in the specified resource group
+
+.PREREQUISITES
+	There should be an existing virtual network,subnet,Azure Kubernetes Service
+
+.OUTPUTS
+    Information on the Created node pool details
+
+.PARAMETER ResourceGroupName
+    Name of the Resource Group where the AKS cluster is present
+
+.PARAMETER ClusterName
+    Name of the existing AKS cluster
+
+.PARAMETER Location
+    Location for the deployed AKS cluster
+
+.PARAMETER VirtualNetworkName
+    Name of the Virtual Network to be used
+
+.PARAMETER VirtualNetworkRGName
+    Name of the Resource Group where the Virtual Network resides
+
+.PARAMETER SubnetName
+    Name of the subnet to be used for node pool
+
+.PARAMETER AgentCount
+    Number of worker node instances
+
+.PARAMETER WorkerNodeVMSize
+    workerNodeVMSize is the size of nodes
+
+.PARAMETER OsType
+    osType worker node for AKS cluster
+
+.PARAMETER DeploymentDebugLevel
+    DeploymentDebugLevel is None
+
+.PARAMETER AgentPoolName
+    agent pool name for AKS worker nodes
+#>
+[CmdletBinding()]
+Param (
+    [Parameter(Mandatory = $true)]
+    [String] $ResourceGroupName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $ClusterName,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateSet("westeurope", "northeurope", "westus2", "westus", "westus3", "eastus2", "centralus", "westcentralus", "japaneast", "japanwest")]
+    [String] $Location,
+
+    [Parameter(Mandatory = $true)]
+    [String] $VirtualNetworkRGName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $VirtualNetworkName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $SubnetName,
+
+    [Parameter(Mandatory = $true)]
+    [Int] $AgentCount,
+
+    [Parameter(Mandatory = $true)]
+    [String] $WorkerNodeVMSize,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateSet("linux", "windows")]
+    [String] $OsType,
+
+    [Parameter(Mandatory = $true)]
+    [ValidateSet('None')]
+    [String] $DeploymentDebugLevel,
+
+    [Parameter(Mandatory = $true)]
+    [String] $AgentPoolName,
+
+    [Parameter(Mandatory = $false)]
+    [Int] $MaxPods = 30
+)
+
+$TemplateName = 'aksAddAgentpool.json'
+Write-Verbose 'Creating parameters object for ARM Template.'
+$ParameterARM = @{
+    clusterName          = $ClusterName
+    location             = $Location
+    virtualNetworkRGName = $VirtualNetworkRGName
+    virtualNetworkName   = $VirtualNetworkName
+    subnetName           = $SubnetName
+    agentCount           = $AgentCount
+    workerNodeVMSize     = $WorkerNodeVMSize
+    osType               = $OsType
+    agentPoolName        = $AgentPoolName
+    maxPods              = $MaxPods
+}
+Write-Host 'Get template for AKS node pool add.'
+$TemplateFile = Join-Path -Path $PSScriptRoot -ChildPath "..\arm\$TemplateName"
+$TemplateName = (Get-ChildItem $TemplateFile).BaseName
+$DeploymentName = "ARM-deployment-$( -join ((0x30..0x39) + ( 0x41..0x5A) + ( 0x61..0x7A) | Get-Random -Count 48  | ForEach-Object {[char]$_}) )"
+
+$DeploymentParams = @{
+    Name                    = $DeploymentName
+    ResourceGroupName       = $ResourceGroupName
+    TemplateFile            = $TemplateFile
+    TemplateParameterObject = $ParameterARM
+    DeploymentDebugLogLevel = $DeploymentDebugLevel
+    ErrorVariable           = 'errorMessages'
+    ErrorAction             = 'SilentlyContinue'
+    Verbose                 = $true
+}
+Write-Verbose 'Deploying ARM Template.'
+New-AzResourceGroupDeployment @DeploymentParams
+If ($errorMessages) {
+    Write-Error "Template deployment returned the following errors: $errorMessages"
+}
+----------------------------------------------------
+<#
+    .SYNOPSIS
+        Creates a new Blob Container within a Storage Account
+
+    .DESCRIPTION
+        Creates a new Blob Container within the specifiied Azure Storage Account
+
+    .PARAMETER ResourceGroupName
+        Name of the Resource Group where the Storage Account is located
+
+    .PARAMETER StorageAccountName
+        Name of the Storage Account where the Blob Container should be created
+
+    .PARAMETER ContainerName
+        Name of the Container that should be created
+
+    .EXAMPLE
+        .\Create-BlobContainer.ps1 -ResourceGroupName demo01-rg -StorageAccountName demo01-sa -ContainerName demo01-container
+#>
+Param (
+    [Parameter(Mandatory = $true)]
+    [string] $StorageAccountName,
+    [Parameter(Mandatory = $true)]
+    [ValidateScript( {
+            $ContainerName = $_
+            if ($ContainerName -cmatch '^[a-z0-9]{1}[a-z0-9-]{1,61}[a-z0-9]{1}$') {
+                Return $True
+            }
+            else {
+                Throw "Container name '$ContainerName' is invalid. Valid names start and end with a lower case letter or a number and has in between a lower case letter, number or dash with no consecutive dashes and is 3 through 63 characters long."
+            }
+        })]
+    [string] $ContainerName
+)
+
+[int]$Retry = 12
+[int]$SleepInSeconds = 15
+
+Write-Host "Start creation of storage account container '$ContainerName'"
+
+Write-Host 'Specifying storage account context'
+$Context = New-AzStorageContext -StorageAccountName $StorageAccountName -UseConnectedAccount
+Write-Verbose ($Context | ConvertTo-Json)
+
+Write-Host "Verifying if container '$ContainerName' is already present"
+$Container = Get-AzStorageContainer -Context $Context -Name $ContainerName -ErrorAction SilentlyContinue
+
+if ($null -eq $Container) {
+    [int]$Count = 1
+    do {
+        Write-Host "Creating blob storage container '$ContainerName' (Attempt '$Count' of $Retry)"
+        $Container = New-AzStorageContainer -Context $Context -Name $ContainerName -ErrorAction SilentlyContinue -ErrorVariable Failed
+
+        if ($Failed) {
+            $Failed | Out-Host
+        }
+
+        if ($null -ne $Container) {
+            break
+        }
+
+        $Count++
+
+        if ($Count -le $Retry) {
+            Write-Host "Pausing execution for $SleepInSeconds seconds"
+            Start-Sleep -Seconds $SleepInSeconds
+            $SleepInSeconds += 15
+
+            Write-Host "Refreshing storage context"
+            Remove-Variable -Name Context
+            $Context = New-AzStorageContext -StorageAccountName $StorageAccountName -UseConnectedAccount
+        }
+    } while ($Count -le $Retry)
+
+    if ($Count -gt $Retry -or $null -eq $Container) {
+        Write-Error "Failed to create blob storage container '$ContainerName'"
+        #throw $Failed
+    }
+}
+
+Write-Host "Storage account container present"
+
+@{
+    ContainerName     = $Container.Name
+    ContainerEndPoint = $Container.CloudBlobContainer.Uri
+}
+
+Write-Host "Storage account container creation completed"
+---------------------------------------------------------------------------
+Param (
+    [Parameter(Mandatory = $true)]
+    [String] $ResourceGroupName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $StorageAccountName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $ContainerName,
+
+    [Parameter(Mandatory = $true)]
+    [String] $FileName,
+
+    [Parameter(Mandatory = $false)]
+    [String] $DirectoryName,
+
+    [Parameter(Mandatory = $false)]
+    [string]
+    [ValidateLength(1, 7)]
+    [ValidatePattern("^[a-zA-Z]+$")]
+    $Permissions
+)
+
+# Setting default values
+if ([string]::IsNullOrEmpty($Permissions)) {
+    $Permissions = 'r'
+    Write-Output "Permissions set to default value '$Permissions'."
+}
+else {
+    Write-Output "Permissions '$Permissions' used from parameter"
+}
+
+if ([string]::IsNullOrEmpty($DirectoryName)) {
+    $Blob = $FileName
+}
+else {
+    $Blob = '{0}\{1}' -f $DirectoryName, $Filename
+}
+Write-Output ('SasToken generated for file {0}.' -f $Blob)
+
+try {
+
+    $Key0 = Get-AzStorageAccountKey -ResourceGroupName $ResourceGroupName -Name $StorageAccountName | Select-Object -First 1 -ExpandProperty Value
+    $Context = New-AzStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $Key0
+
+    # To generate sastokens accountkey is needed. Below option is not possible in this situation
+    # $Context = New-AzStorageContext -StorageAccountName $StorageAccountName -UseConnectedAccount
+
+    $Params = @{
+        'Container'  = $ContainerName
+        'Blob'       = $Blob
+        'Permission' = $Permissions
+        'Context'    = $Context
+        'ExpiryTime' = (Get-Date).AddDays(1).ToUniversalTime()
+    }
+    $SASToken = New-AzStorageBlobSASToken @Params
+    Write-output ('New SasToken is generated valid for 24h.')
+
+    # Convert SasToken to securestring
+    # $SecureSaSToken = ConvertTo-SecureString -String ($SASToken) -AsPlainText -Force
+    Write-Output -InputObject ('##vso[task.setvariable variable=SASToken;issecret=true;]{0}' -f $SaSToken)
+    return $SasToken
+}
+catch {
+    Write-Error $_
+}
+--------------------------------------------------
+<#
+.SYNOPSIS
+Creates an Azure Storage Account.
+
+.DESCRIPTION
+Creates a Storage Account with the specified name and settings.
+
+.OUTPUTS
+HashTable
+Information on the Created Resource"
+
+.EXAMPLE
+Create-StorageAccount.ps1 -ResourceGroupName ccoe-dta01-rg -StorageAccountName ccoedta01tstsa -StorageAccountSku Standard_LRS -StorageAccountKind BlobStorage -AccessTier Hot -IpRules '84.24.135.30'
+
+This command will create storage account ccoedta01tstsa in the same Azure region as the resource group.
+Public IP address 84.24.135.30 is configured in the firewall to allow access.
+#>
+[CmdletBinding()]
+Param (
+    [Parameter(
+        Mandatory = $true,
+        HelpMessage = "Name of the Resource Group where the Storage Account will be created")]
+    [String]$ResourceGroupName,
+
+    [Parameter(
+        Mandatory = $true,
+        HelpMessage = "Storage Account Name that will be created in the Resource Group name")]
+    [ValidateLength(3, 24)]
+    [ValidatePattern("^[a-z0-9]+$")]
+    [String]$StorageAccountName,
+
+    [Parameter(
+        Mandatory = $true,
+        HelpMessage = "Sku for the Storage Account being created")]
+    [ValidateSet('Standard_LRS', 'Standard_GRS', 'Standard_RAGRS', 'Standard_ZRS', 'Standard_GZRS', 'Standard_RAZRS', 'Premium_LRS')]
+    [String]$StorageAccountSku,
+
+    [Parameter(
+        Mandatory = $true,
+        HelpMessage = "Kind of Storage Account being created (Blob Storage, Storage Account v2 or Data Lake Store)")]
+    [ValidateSet('BlobStorage', 'BlockBlobStorage', 'FileStorage', 'StorageV2', 'DataLakeStoreGen2')]
+    [String]$StorageAccountKind,
+
+    [Parameter(
+        Mandatory = $false,
+        HelpMessage = "Access tier for the Storage Account being created")]
+    [ValidateSet('Hot', 'Cool')]
+    [String]$AccessTier,
+
+    [Parameter(
+        Mandatory = $false,
+        HelpMessage = "Public IP addresses and/or IP address ranges which should be granted explicit permission to the storage account.")]
+    [Array]$IpRules,
+
+    [Parameter(
+        Mandatory = $false,
+        HelpMessage = "To Enable Nfsv3 protocol for storage account.")]
+    [Boolean]$isNfsV3Enabled,
+
+    [Parameter(
+        Mandatory = $false,
+        HelpMessage = "Provide the Azure location in where the storage account is to be provisioned")]
+    [String]$Location,
+
+    [Parameter(Mandatory = $false)]
+    [Switch]$DoNotSendMetrics,
+
+    [Parameter(
+        Mandatory = $false,
+        HelpMessage = "To enable/disable usage of shared access key. Default is disabled")]
+    [Boolean]$SharedAccessKeyEnabled = $false
+
+)
+Function Test-IpRules {
+    <#
+    .DESCRIPTION
+    Validate the informed IP rules, if any, and return a concatenated string with all the values.
+    #>
+    [CmdLetBinding()]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
+    Param(
+        [Parameter(Mandatory = $false)]
+        [Array] $IpRules
+    )
+    $PrivateIpAddressPattern = '(^127\.)|(^192\.168\.)|(^10\.)|(^172\.1[6-9]\.)|(^172\.2[0-9]\.)|(^172\.3[0-1]\.)|(^::1$)|(^[fF][cCdD])'
+    $IPAddressPattern = '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0]))$'
+    if (-Not [string]::IsNullOrWhiteSpace($IpRules)) {
+        foreach ($IpRangeOrAddress In $IpRules) {
+            if ($IpRangeOrAddress -match $PrivateIpAddressPattern) {
+                throw "Only public IP addresses are allowed"
+            }
+            elseif ($IpRangeOrAddress -notmatch $IPAddressPattern) {
+                throw "'$IpRangeOrAddress' is not a valid IPv4 address or CIDR range (CIDR must be smaller than or equal to 30)."
+            }
+        }
+    }
+
+    $IpRulesString = $IpRules -Join ","
+
+    $IpRulesString
+}
+
+$IpRulesString = Test-IpRules -IpRules $IpRules
+
+Write-Verbose "Get template for storage account"
+if ($StorageAccountKind -eq 'DataLakeStoreGen2') {
+    $StorageAccountKind = 'StorageV2'
+
+    if ($StorageAccountSku -match "Premium") {
+        throw "Data Lake Storage Gen2 does not support the premium storage sku."
+    }
+
+    $TemplateFile = Join-Path -Path $PSScriptRoot -ChildPath "..\arm\dls2.json"
+    [hashtable]$ParametersARM = @{
+        storageAccountName = $StorageAccountName
+        storageAccountSku  = $StorageAccountSku
+        storageAccountKind = $StorageAccountKind
+        ipRange            = $IpRulesString
+        isNfsV3Enabled     = $isNfsV3Enabled
+    }
+}
+else {
+
+    if ($StorageAccountKind -eq 'BlockBlobStorage' -or $StorageAccountKind -eq 'FileStorage') {
+        if ($StorageAccountSku -ne 'Premium_LRS') {
+            throw "Storage account kind '$($StorageAccountKind)' is only available on Premium Locally-redundant storage (Premium_LRS). `n You selected: '$($StorageAccountSku)'"
+        }
+    }
+    if ($isNfsV3Enabled -eq 'true') {
+        if ($StorageAccountKind -ne 'DataLakeStoreGen2') {
+            throw "Storage account NfsV3 protocol feature only available with StorageAccountKind (DataLakeStoreGen2)."
+        }
+    }
+
+    $TemplateFile = Join-Path -Path $PSScriptRoot -ChildPath "..\arm\storageAccount.json"
+    [hashtable]$ParametersARM = @{
+        storageAccountName = $StorageAccountName
+        storageAccountSku  = $StorageAccountSku
+        storageAccountKind = $StorageAccountKind
+        ipRange            = $IpRulesString
+    }
+}
+
+#Below is to make sure InfraEncryption is enabled on new Storage Account(SA)
+$SA = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -StorageAccountName $StorageAccountName -ErrorAction 'SilentlyContinue'
+if (-Not $SA) {
+    $ParametersARM.Add('newOrExisting', "new")
+}
+else {
+    $ParametersARM.Add('newOrExisting', "existing")
+}
+
+if (-Not ([string]::IsNullOrWhiteSpace($Location))) {
+    $ParametersARM.Add('location', $Location)
+}
+
+if (-Not ([string]::IsNullOrWhiteSpace($AccessTier))) {
+    $ParametersARM.Add('accessTier', $AccessTier)
+}
+
+#Limiting Deployment name to 64 characters
+$DeploymentName = "ARM-deployment-$( -join ((0x30..0x39) + ( 0x41..0x5A) + ( 0x61..0x7A) | Get-Random -Count 48  | ForEach-Object {[char]$_}) )"
+
+Write-Host "Deploy storage account ARM template"
+Write-Verbose $TemplateFile
+try {
+    [hashtable]$DeploymentParameters = @{
+        Name                    = $DeploymentName
+        ResourceGroupName       = $ResourceGroupName
+        TemplateFile            = $TemplateFile
+        TemplateParameterObject = $ParametersARM
+    }
+    Write-Verbose ($DeploymentParameters | ConvertTo-Json -Depth 4)
+    $Result = New-AzResourceGroupDeployment @DeploymentParameters
+}
+catch {
+    $ErrorMessage = $_.Exception.Message
+    Write-Verbose ($ErrorMessage | ConvertTo-Json -Depth 10)
+    if ($ErrorMessage.Contains('isHnsEnabled') -and $ErrorMessage.Contains('AccountPropertyCannotBeUpdated')) {
+
+        Write-Error $_.Exception -ErrorAction Continue
+        throw 'Data Lake Store Gen2 features can only be enabled/disabled during the creation of a Storage Account.'
+    }
+
+    # When the ARM template is not valid, the details are logged in the Azure Activity Logs, but not returned by New-AzResourceGroupDeployment
+    # Execute a Test-AzResourceGroupDeployment to try to get the actual error message.
+    if ($_.Exception.Message.Contains('Code=InvalidTemplateDeployment')) {
+        Write-Host 'Code=InvalidTemplateDeployment'
+        $DeploymentParameters.Remove('Name')
+        $DetailsList = (Test-AzResourceGroupDeployment @DeploymentParameters)
+        $DetailsItem = $DetailsList[0]
+        $lastErrorMessage = $_.Exception.Message
+        while ($DetailsItem) {
+            $errorMessage = "$($DetailsItem.Code): $($DetailsItem.Message)"
+            Write-Warning $errorMessage -ErrorAction Continue
+            $lastErrorMessage = $errorMessage
+            # It's a chained list of detail objects.
+            $DetailsItem = $DetailsItem.Details
+        }
+        throw $lastErrorMessage
+    }
+
+    throw $_
+}
+
+if ($SharedAccessKeyEnabled -eq $true) {
+    Write-Host "Enabling shared access key for storage account with SasExpirationPeriod 7 days."
+    Set-AzStorageAccount -ResourceGroupName $ResourceGroupName -AccountName $StorageAccountName -AllowSharedKeyAccess $SharedAccessKeyEnabled -SasExpirationPeriod 7.00:00:00
+}
+else {
+    Set-AzStorageAccount -ResourceGroupName $ResourceGroupName -AccountName $StorageAccountName -AllowSharedKeyAccess $SharedAccessKeyEnabled
+}
+
+$output = [HashTable] @{
+    ResourceID   = $Result.Outputs['resourceID'].Value
+    ResourceName = $Result.Outputs['resourceName'].Value
+}
+
+if ($OutputVariableName) {
+    Write-Host "Writing output variable:"
+    $output.Keys | ForEach-Object {
+        Write-Host "- $OutputVariableName.$($_) = $($output[$_])"
+        Write-Host "##vso[task.setVariable variable=$OutputVariableName.$($_)]$($output[$_])"
+        Write-Host "##vso[task.setVariable variable=$OutputVariableName.$($_);isOutput=true]$($output[$_])"
+    }
+}
+
+Write-Output $output
+--------------------------------------------
+<#
+    .SYNOPSIS
+        Add Role assignements to the created storage account
+
+    .DESCRIPTION
+        This function will add any role assignment selected by the user to the storage account that is being created by the extension
+
+    .PARAMETER ResourceGroupName
+        Name of the resource group that contains the Storage Account
+
+    .PARAMETER StorageAccountName
+        Name of Storage Account that was created
+
+    .PARAMETER ServicePrincipalId
+        Id of the user Service Principal (This is the user running the extension context)
+
+    .PARAMETER Roles
+        Comma-seperated list of roles to be added to the Service Principal for this Storage Account
+
+    .EXAMPLE
+        Add-RoleAssignments -ResourceGroupName ResourceGroupA -StorageAccountName appstorage -ServicePrincipalId user@asml.com -Roles "Storage Blob Data Contributor,Storage Blob Data Owner"
+#>
+[CmdLetBinding()]
+Param(
+    [Parameter(Mandatory = $true)]
+    [String] $ResourceGroupName,
+    [Parameter(Mandatory = $true)]
+    [String] $StorageAccountName,
+    [Parameter(Mandatory = $true)]
+    [String] $Roles,
+    [Parameter(Mandatory = $false)]
+    [String] $ServicePrincipalId
+)
+
+# Retrieve the ServicePrincipalId from the current context
+if ([string]::IsNullOrWhiteSpace($ServicePrincipalId)) {
+    $ContextAccountId = (Get-AzContext).Account.Id
+    $ServicePrincipal = Get-AzADServicePrincipal -ServicePrincipalName $ContextAccountId
+    $ServicePrincipalId = $ServicePrincipal.Id
+}
+
+Function Wait-StorageAccountProvisioning {
+    <#
+        .SYNOPSIS
+            Wait for the provisioning of the Storage Account
+        .DESCRIPTION
+            Waits for the provisioning of the Storage Account. Max waiting time is 2 minutes.
+        .PARAMETER StorageAccountName
+            Name of the storage account being provisioned
+        .EXAMPLE
+            Wait-StorageAccountProvisioning -StorageAccountName mystorageaccount
+    #>
+    [CmdLetBinding()]
+    Param(
+        [Parameter(Mandatory = $true)]
+        [String]$StorageAccountName
+    )
+    $StorageAccount = (Get-AzStorageAccount | Where-Object { $_.StorageAccountName -eq $StorageAccountName })
+    $SleepInSeconds = 2
+
+    While ($null -ne $StorageAccount) {
+        Write-Verbose "Waiting for $SleepInSeconds seconds to get the Storage Account '$StorageAccountName'..."
+        Start-Sleep -Seconds $SleepInSeconds
+
+        $StorageAccount = (Get-AzStorageAccount | Where-Object { $_.StorageAccountName -eq $StorageAccountName })
+
+        $SleepInSeconds = $SleepInSeconds * 2
+        if ($SleepInSeconds -gt 32) {
+            break
+        }
+    }
+}
+
+Wait-StorageAccountProvisioning -StorageAccountName $StorageAccountName
+
+$AvailableRoleAssignments = @(
+    "Storage Account Contributor",
+    "Storage Account Key Operator Service Role",
+    "Storage Blob Data Contributor",
+    "Storage Blob Data Owner",
+    "Storage Blob Data Reader",
+    "Storage Queue Data Contributor",
+    "Storage Queue Data Message Processor",
+    "Storage Queue Data Message Sender",
+    "Storage Queue Data Reader"
+)
+
+# Set Role Assignment if selected in task
+Foreach ($Role in $AvailableRoleAssignments) {
+    $RoleName = $Role.Replace(' ', '')
+
+    $RoleSelected = $Roles.Replace(' ', '').Contains($RoleName)
+    If ($RoleSelected) {
+        # Apply Role Assignment
+        Write-Verbose -Message "Applying Role Assignment '$Role'"
+
+        $Scope = (Get-AzResource -Name $StorageAccountName -ResourceGroupName $ResourceGroupName).ResourceId
+        $RoleAssignments = Get-AzRoleAssignment -ObjectId $ServicePrincipalId -Scope $Scope
+        If (($RoleAssignments).RoleDefinitionName -notcontains $Role) {
+            # Set role on service principal
+            $RoleAssignmentParams = @{
+                RoleDefinitionName = $Role
+                Scope              = $Scope
+                ObjectId           = $ServicePrincipalId
+            }
+
+            Write-Verbose ($RoleAssignmentParams | ConvertTo-Json)
+            New-AzRoleAssignment @RoleAssignmentParams -ErrorAction Stop
+
+            Write-Output "Role '$Role' applied for '$ServicePrincipalId' on Storage Account '$StorageAccountName'"
+        }
+        Else {
+            Write-Output "Role '$Role' already applied to '$ServicePrincipalId' on Storage Account '$StorageAccountName'"
+        }
+    }
+}
+----------------------------------------------------------------------
+
+Param (
+    [Parameter(Mandatory = $true)]
+    [string] $ResourceGroupName,
+
+    [Parameter(Mandatory = $true)]
+    [string] $StorageAccountName,
+
+    # Should be a comma delimited string such as: "8.8.8.8,28.1.0.0/16"
+    [Parameter(Mandatory = $false)]
+    [string] $IPAddressOrRange
+)
+
+# Constants
+$Url = "http://ifconfig.me/ip"
+
+if ([string]::IsNullOrEmpty($IPAddressOrRange)) {
+    Write-Host "Obtaining public IP address of the agent"
+    $IPAddressOrRangeArray = (Invoke-WebRequest -Uri $Url -ErrorAction SilentlyContinue).Content
+    Write-Host "Found IP address: '$IPAddressOrRangeArray'"
+}
+else {
+    # Check if IPAddressOrRange is a valid IP address or CIDR range
+    $IPAddressOrRangeArray = ($IPAddressOrRange.split(",")).replace(' ', '')
+    if (!([string]::IsNullOrEmpty($IPAddressOrRange.Trim()))) {
+        foreach ($IPAddressOrRange In $IPAddressOrRangeArray) {
+            Write-Host "Validating IP address '$IPAddressOrRange'"
+            [bool] $IsValidIP = $IPAddressOrRange -Match '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))?$'
+
+            if (!$IsValidIP) {
+                Write-Error "The specified IP address is not a valid IPv4 address or CIDR range."
+                $HasError = $true
+            }
+        }
+    }
+}
+
+if ($HasError) {
+    return
+}
+
+# Get the current IP rules:
+Write-Host "Retrieving existing storage account IP address rules"
+$CurrentRuleSet = (Get-AzStorageAccountNetworkRuleSet -ResourceGroupName $ResourceGroupName -AccountName $StorageAccountName).IPRules.IPAddressOrRange
+
+foreach ($IPAddressOrRangeItem in $IPAddressOrRangeArray) {
+    Write-Host "Handling IP address (range): '$IPAddressOrRangeItem'"
+    If ($CurrentRuleSet -notcontains $IPAddressOrRangeItem) {
+        [int]$Count = 0
+        do {
+            Write-Host "Adding IP address (range) to storage account IP address allow list"
+            Add-AzStorageAccountNetworkRule -ResourceGroupName $ResourceGroupName -AccountName $StorageAccountName -IPAddressOrRange $IPAddressOrRangeItem
+
+            Write-Host "Validating if IP address (range) is added successfully"
+            $CheckNetworkRule = (Get-AzStorageAccountNetworkRuleSet -ResourceGroupName $ResourceGroupName -AccountName $StorageAccountName).IPRules.IPAddressOrRange
+            Write-Host "$($CheckNetworkRule | Out-String)"
+            $Failed = $false
+            if ($CheckNetworkRule -notcontains $IPAddressOrRangeItem) {
+                $Failed = $true
+                $Count++
+                Write-Host "Failed to add IP address (range) to the firewall rules - pausing for 10 seconds before next attempt"
+                Start-Sleep -Seconds 10
+            }
+            else {
+                Write-Host 'IP address (range) successfully added to the allow list'
+            }
+        } while ($Failed -or $Count -gt 12)
+    }
+    else {
+        Write-Host 'IP address (range) already present to the allow list'
+    }
+}
+
+---------------------------------------------------
+
